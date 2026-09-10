@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "174491625447",
+    "project_id": "equi-harmony-monitor",
+    "storage_bucket": "equi-harmony-monitor.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:174491625447:android:a1bb19efaf23f4033d7f42",
+        "android_client_info": {
+          "package_name": "com.example.equine_control_monitor"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCtPPDPzPBjRvyVUv3UVi0aS9JhMIXwIg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
