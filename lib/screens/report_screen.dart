@@ -65,7 +65,7 @@ class ReportScreen extends StatelessWidget {
       builder: (context, _) {
         final language = languageController.language;
         return Scaffold(
-          appBar: AppBar(title: Text(AppText.get(language, 'report'))),
+          appBar: AppBar(title: Text(AppText.translate(language, 'report'))),
           body: Center(
             child: FilledButton.icon(
               onPressed: () async {
@@ -73,7 +73,7 @@ class ReportScreen extends StatelessWidget {
                 await Printing.layoutPdf(onLayout: (_) => document.save());
               },
               icon: const Icon(Icons.picture_as_pdf),
-              label: Text(AppText.get(language, 'generate_report')),
+              label: Text(AppText.translate(language, 'generate_report')),
             ),
           ),
         );

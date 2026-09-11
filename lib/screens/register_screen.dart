@@ -31,7 +31,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (nameCtrl.text.trim().isEmpty ||
         emailCtrl.text.trim().isEmpty ||
         passCtrl.text.length < 6) {
-      _message(AppText.get(language, 'fill_required_fields'));
+      _message(AppText.translate(language, 'fill_required_fields'));
       return;
     }
     setState(() => isSaving = true);
@@ -50,8 +50,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       if (registrationError != null) {
         setState(() => isSaving = false);
         await _showResult(
-          AppText.get(language, 'account_error_title'),
-          '${AppText.get(language, 'account_error_message_prefix')} $registrationError',
+          AppText.translate(language, 'account_error_title'),
+          '${AppText.translate(language, 'account_error_message_prefix')} $registrationError',
         );
         return;
       }
@@ -62,7 +62,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       );
       if (createdUser.isAdmin && createdUser.isApproved) {
         if (!mounted) return;
-        await _showResult(AppText.get(language, 'account_created_title'), AppText.get(language, 'account_created_message'));
+        await _showResult(AppText.translate(language, 'account_created_title'), AppText.translate(language, 'account_created_message'));
         if (!mounted) return;
         Navigator.pushNamedAndRemoveUntil(context, '/dashboard', (route) => false);
         return;
@@ -70,15 +70,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
       await AuthService.logout();
       setState(() => isSaving = false);
       await _showResult(
-        AppText.get(language, 'request_sent_title'),
-        AppText.get(language, 'request_sent_message'),
+        AppText.translate(language, 'request_sent_title'),
+        AppText.translate(language, 'request_sent_message'),
       );
       if (!mounted) return;
       Navigator.pop(context);
     } catch (error) {
       if (!mounted) return;
       setState(() => isSaving = false);
-      await _showResult(AppText.get(language, 'account_error_title'), '${AppText.get(language, 'account_error_message_prefix')} $error');
+      await _showResult(AppText.translate(language, 'account_error_title'), '${AppText.translate(language, 'account_error_message_prefix')} $error');
     }
   }
 
@@ -91,7 +91,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         actions: [
           FilledButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: Text(AppText.get(widget.languageController.language, 'accept')),
+            child: Text(AppText.translate(widget.languageController.language, 'accept')),
           ),
         ],
       ),
@@ -109,28 +109,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
       builder: (context, _) {
         final language = widget.languageController.language;
         return Scaffold(
-          appBar: AppBar(title: Text(AppText.get(language, 'create_account'))),
+          appBar: AppBar(title: Text(AppText.translate(language, 'create_account'))),
           body: ListView(
             padding: const EdgeInsets.all(20),
             children: [
               Text(
-                AppText.get(language, 'register_pending_notice'),
+                AppText.translate(language, 'register_pending_notice'),
                 style: const TextStyle(fontStyle: FontStyle.italic),
               ),
               const SizedBox(height: 20),
-              TextField(controller: nameCtrl, decoration: InputDecoration(labelText: AppText.get(language, 'name'), border: const OutlineInputBorder())),
+              TextField(controller: nameCtrl, decoration: InputDecoration(labelText: AppText.translate(language, 'name'), border: const OutlineInputBorder())),
               const SizedBox(height: 14),
-              TextField(controller: emailCtrl, keyboardType: TextInputType.emailAddress, decoration: InputDecoration(labelText: AppText.get(language, 'email'), border: const OutlineInputBorder())),
+              TextField(controller: emailCtrl, keyboardType: TextInputType.emailAddress, decoration: InputDecoration(labelText: AppText.translate(language, 'email'), border: const OutlineInputBorder())),
               const SizedBox(height: 14),
               TextField(
                 controller: passCtrl,
                 obscureText: hidePassword,
                 decoration: InputDecoration(
-                  labelText: AppText.get(language, 'password'),
-                  helperText: AppText.get(language, 'min_password_chars'),
+                  labelText: AppText.translate(language, 'password'),
+                  helperText: AppText.translate(language, 'min_password_chars'),
                   border: const OutlineInputBorder(),
                   suffixIcon: IconButton(
-                    tooltip: AppText.get(language, hidePassword ? 'show_password' : 'hide_password'),
+                    tooltip: AppText.translate(language, hidePassword ? 'show_password' : 'hide_password'),
                     onPressed: () => setState(() => hidePassword = !hidePassword),
                     icon: Icon(hidePassword ? Icons.visibility : Icons.visibility_off),
                   ),
@@ -146,7 +146,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
                     : const Icon(Icons.how_to_reg),
-                label: Text(isSaving ? AppText.get(language, 'saving') : AppText.get(language, 'submit_request')),
+                label: Text(isSaving ? AppText.translate(language, 'saving') : AppText.translate(language, 'submit_request')),
               ),
             ],
           ),

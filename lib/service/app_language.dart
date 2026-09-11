@@ -144,6 +144,9 @@ class AppText {
       'feed': 'Tablica', 'feed_subtitle': 'Zdjęcia i chwile ze stajni', 'new_post': 'Nowy post', 'post_caption_hint': 'Napisz coś...',
       'add_photo': 'Dodaj zdjęcie', 'add_photo_video': 'Dodaj zdjęcie lub wideo', 'play_video': 'Odtwórz wideo', 'publish': 'Opublikuj', 'no_posts': 'Brak publikacji. Bądź pierwszy!', 'comment': 'Skomentuj',
       'post_error': 'Nie udało się opublikować:',
+      'new_feed_notification_title': 'Tablica', 'new_feed_notification_body': 'Na tablicy pojawił się nowy post.',
+      'new_chat_notification_title': 'Czat', 'new_chat_notification_body': 'Masz nową wiadomość na czacie.',
+      'new_assistant_notification_title': 'Asystent', 'new_assistant_notification_body': 'Użytkownik napisał do ciebie w asystencie.',
       'stable_facebook': 'Facebook stajni',
       'transfer_primary_title': 'Zmienić głównego administratora', 'transfer_primary_action': 'Ustaw jako głównego administratora',
       'transfer_primary_confirm_prefix': 'Czy chcesz uczynić', 'transfer_primary_confirm_suffix': 'głównym administratorem? Ty przestaniesz nim być.',
@@ -153,22 +156,16 @@ class AppText {
     'es': {
       'dashboard': 'Panel de administración', 'notifications': 'Notificaciones', 'notifications_empty': 'No hay notificaciones nuevas.', 'work_area': 'Área de trabajo',
       'choose_module': 'Selecciona un módulo para comenzar.', 'horses': 'Caballos', 'your_friends': 'Tus amigos',
-      'horse_subtitle': 'Fichas y estado de salud', 'monitoring': 'Monitoreo',
       'monitoring_subtitle': 'Datos en tiempo real', 'records': 'Registros',
       'records_subtitle': 'Historial y eventos', 'users': 'Usuarios', 'admin_role': 'Administrador',
-      'users_subtitle': 'Administrar accesos', 'veterinarian': 'Veterinario',
       'veterinarian_subtitle': 'Datos y evaluaciones', 'settings': 'Configuración',
       'language': 'Idioma de la aplicación', 'save': 'Guardar', 'add': 'Agregar',
-      'logout': 'Cerrar sesión', 'in_development': 'Módulo en construcción',
       'horse_card': 'Ficha del caballo', 'veterinarian_card': 'Ficha del veterinario',
       'owner_card': 'Ficha del propietario', 'address': 'Dirección', 'current_address': 'Dirección actual',
-      'national_id': 'PESEL / documento de identidad', 'horse_id': 'Número de identificación del caballo',
       'private_data_notice': 'Dato privado. Solo visible al desbloquearlo.', 'show_data': 'Mostrar', 'hide_data': 'Ocultar',
       'pathologies': 'Patologías y enfermedades', 'horses_owned': 'Caballos que posee', 'license_number': 'Número de licencia veterinaria', 'clinic_address': 'Dirección de clínica o consulta',
-      'name': 'Nombre completo', 'email': 'Correo electrónico', 'phone': 'Teléfono',
       'clinic': 'Clínica', 'breed': 'Raza', 'birth_date': 'Fecha de nacimiento', 'birth_date_required': 'Toca para seleccionar tu fecha de nacimiento', 'age_restriction': 'Solo pueden registrarse personas de 18 años o más.',
       'microchip': 'Número de microchip', 'notes': 'Observaciones', 'saved': 'Información guardada',
-      'connected_sensor': 'Sensor conectado', 'live': 'En vivo', 'temperature': 'Temperatura',
       'humidity': 'Humedad', 'ammonia': 'Amoníaco', 'air_quality': 'Calidad del aire',
       'sensor_notice': 'Datos de demostración hasta conectar el ESP32.', 'add_record': 'Añadir registro', 'edit_record': 'Editar registro',
       'record_title': 'Título del registro', 'details': 'Detalles', 'cancel': 'Cancelar',
@@ -229,6 +226,9 @@ class AppText {
       'feed': 'Muro', 'feed_subtitle': 'Fotos y momentos del establo', 'new_post': 'Nueva publicación', 'post_caption_hint': 'Escribe algo...',
       'add_photo': 'Agregar foto', 'add_photo_video': 'Agregar foto o video', 'play_video': 'Reproducir video', 'publish': 'Publicar', 'no_posts': 'Aún no hay publicaciones. ¡Sé el primero!', 'comment': 'Comentar',
       'post_error': 'No se pudo publicar:',
+      'new_feed_notification_title': 'Muro', 'new_feed_notification_body': 'Hay una nueva publicación en el muro.',
+      'new_chat_notification_title': 'Chat', 'new_chat_notification_body': 'Tienes un nuevo mensaje en el chat.',
+      'new_assistant_notification_title': 'Asistente', 'new_assistant_notification_body': 'Un usuario te escribió al asistente.',
       'stable_facebook': 'Facebook del establo',
       'transfer_primary_title': 'Cambiar administrador principal', 'transfer_primary_action': 'Hacer administrador principal',
       'transfer_primary_confirm_prefix': '¿Quieres hacer a', 'transfer_primary_confirm_suffix': 'el administrador principal? Tú dejarás de serlo.',
@@ -313,6 +313,9 @@ class AppText {
       'feed': 'Pinnwand', 'feed_subtitle': 'Fotos und Momente aus dem Stall', 'new_post': 'Neuer Beitrag', 'post_caption_hint': 'Schreib etwas...',
       'add_photo': 'Foto hinzufügen', 'add_photo_video': 'Foto oder Video hinzufügen', 'play_video': 'Video abspielen', 'publish': 'Veröffentlichen', 'no_posts': 'Noch keine Beiträge. Sei der Erste!', 'comment': 'Kommentieren',
       'post_error': 'Veröffentlichung fehlgeschlagen:',
+      'new_feed_notification_title': 'Pinnwand', 'new_feed_notification_body': 'Es gibt einen neuen Beitrag auf der Pinnwand.',
+      'new_chat_notification_title': 'Chat', 'new_chat_notification_body': 'Sie haben eine neue Chatnachricht.',
+      'new_assistant_notification_title': 'Assistent', 'new_assistant_notification_body': 'Ein Benutzer hat Ihnen über den Assistenten geschrieben.',
       'stable_facebook': 'Facebook des Stalls',
       'transfer_primary_title': 'Hauptadministrator ändern', 'transfer_primary_action': 'Zum Hauptadministrator machen',
       'transfer_primary_confirm_prefix': 'Möchten Sie', 'transfer_primary_confirm_suffix': 'zum Hauptadministrator machen? Sie werden diese Rolle verlieren.',
@@ -397,6 +400,9 @@ class AppText {
       'feed': 'Prikbord', 'feed_subtitle': 'Foto’s en momenten van de stal', 'new_post': 'Nieuw bericht', 'post_caption_hint': 'Schrijf iets...',
       'add_photo': 'Foto toevoegen', 'add_photo_video': 'Foto of video toevoegen', 'play_video': 'Video afspelen', 'publish': 'Plaatsen', 'no_posts': 'Nog geen berichten. Wees de eerste!', 'comment': 'Reageren',
       'post_error': 'Plaatsen mislukt:',
+      'new_feed_notification_title': 'Prikbord', 'new_feed_notification_body': 'Er is een nieuw bericht op het prikbord.',
+      'new_chat_notification_title': 'Chat', 'new_chat_notification_body': 'U heeft een nieuw chatbericht.',
+      'new_assistant_notification_title': 'Assistent', 'new_assistant_notification_body': 'Een gebruiker heeft u via de assistent geschreven.',
       'stable_facebook': 'Facebook van de stal',
       'transfer_primary_title': 'Hoofdbeheerder wijzigen', 'transfer_primary_action': 'Tot hoofdbeheerder maken',
       'transfer_primary_confirm_prefix': 'Wilt u', 'transfer_primary_confirm_suffix': 'tot hoofdbeheerder maken? U verliest deze rol.',
@@ -481,6 +487,9 @@ class AppText {
       'feed': 'Fil d’actualité', 'feed_subtitle': 'Photos et moments de l’écurie', 'new_post': 'Nouvelle publication', 'post_caption_hint': 'Écrivez quelque chose...',
       'add_photo': 'Ajouter une photo', 'add_photo_video': 'Ajouter une photo ou une vidéo', 'play_video': 'Lire la vidéo', 'publish': 'Publier', 'no_posts': 'Pas encore de publications. Soyez le premier !', 'comment': 'Commenter',
       'post_error': 'Impossible de publier :',
+      'new_feed_notification_title': 'Fil d’actualité', 'new_feed_notification_body': 'Une nouvelle publication est disponible.',
+      'new_chat_notification_title': 'Chat', 'new_chat_notification_body': 'Vous avez un nouveau message dans le chat.',
+      'new_assistant_notification_title': 'Assistant', 'new_assistant_notification_body': 'Un utilisateur vous a écrit via l’assistant.',
       'stable_facebook': 'Facebook de l’écurie',
       'transfer_primary_title': 'Changer l’administrateur principal', 'transfer_primary_action': 'Définir comme administrateur principal',
       'transfer_primary_confirm_prefix': 'Voulez-vous faire de', 'transfer_primary_confirm_suffix': 'l’administrateur principal ? Vous perdrez ce rôle.',
@@ -565,6 +574,9 @@ class AppText {
       'feed': 'Feed', 'feed_subtitle': 'Photos and moments from the stable', 'new_post': 'New post', 'post_caption_hint': 'Write something...',
       'add_photo': 'Add photo', 'add_photo_video': 'Add photo or video', 'play_video': 'Play video', 'publish': 'Publish', 'no_posts': 'No posts yet. Be the first!', 'comment': 'Comment',
       'post_error': 'Could not publish:',
+      'new_feed_notification_title': 'Feed', 'new_feed_notification_body': 'There is a new post in the feed.',
+      'new_chat_notification_title': 'Chat', 'new_chat_notification_body': 'You have a new chat message.',
+      'new_assistant_notification_title': 'Assistant', 'new_assistant_notification_body': 'A user wrote to you through the assistant.',
       'stable_facebook': 'Stable Facebook page',
       'transfer_primary_title': 'Change primary administrator', 'transfer_primary_action': 'Make primary administrator',
       'transfer_primary_confirm_prefix': 'Do you want to make', 'transfer_primary_confirm_suffix': 'the primary administrator? You will lose this role.',
@@ -649,6 +661,9 @@ class AppText {
       'feed': 'Mural', 'feed_subtitle': 'Fotos e momentos do estábulo', 'new_post': 'Nova publicação', 'post_caption_hint': 'Escreva algo...',
       'add_photo': 'Adicionar foto', 'add_photo_video': 'Adicionar foto ou vídeo', 'play_video': 'Reproduzir vídeo', 'publish': 'Publicar', 'no_posts': 'Ainda não há publicações. Seja o primeiro!', 'comment': 'Comentar',
       'post_error': 'Não foi possível publicar:',
+      'new_feed_notification_title': 'Mural', 'new_feed_notification_body': 'Há uma nova publicação no mural.',
+      'new_chat_notification_title': 'Chat', 'new_chat_notification_body': 'Você tem uma nova mensagem no chat.',
+      'new_assistant_notification_title': 'Assistente', 'new_assistant_notification_body': 'Um usuário escreveu para você pelo assistente.',
       'stable_facebook': 'Facebook do estábulo',
       'transfer_primary_title': 'Alterar administrador principal', 'transfer_primary_action': 'Tornar administrador principal',
       'transfer_primary_confirm_prefix': 'Deseja tornar', 'transfer_primary_confirm_suffix': 'o administrador principal? Você perderá essa função.',
@@ -657,6 +672,57 @@ class AppText {
     },
   };
 
-  static String get(AppLanguage language, String key) =>
-      _values[language.name]?[key] ?? _values['pl']![key] ?? key;
+  static const _supplementalValues = {
+    'pl': {'add_animal': 'Dodaj zwierzę', 'edit_animal': 'Edytuj kartę zwierzęcia', 'upload_photo': 'Prześlij zdjęcie', 'animal_type': 'Typ zwierzęcia', 'species_or_breed': 'Gatunek lub rasa', 'vet_passport': 'Paszport weterynaryjny / kod', 'traits': 'Cechy charakterystyczne', 'not_specified': 'nie podano', 'age': 'Wiek', 'chip_label': 'Mikrochip', 'passport': 'Paszport', 'edit': 'Edytuj', 'add_first_animal': 'Dodaj swoje pierwsze zwierzę', 'user_support': 'Pomoc dla użytkownika', 'write_to_support': 'Napisz do pomocy dla użytkownika.', 'write_message': 'Napisz wiadomość', 'assistant_messages': 'Wiadomości do asystenta', 'no_user_messages': 'Nie ma jeszcze wiadomości od użytkowników.', 'select_contact': 'Wybierz kontakt po lewej stronie.', 'reply': 'Odpowiedz', 'set_new_password': 'Ustaw nowe hasło.', 'confirm_password': 'Potwierdź hasło', 'password_update_invalid': 'Hasła muszą być identyczne i mieć co najmniej 6 znaków.', 'password_update_error': 'Nie udało się zaktualizować hasła.'},
+    'es': {'add_animal': 'Añadir animal', 'edit_animal': 'Editar ficha animal', 'upload_photo': 'Subir foto', 'animal_type': 'Tipo de animal', 'species_or_breed': 'Raza o especie', 'vet_passport': 'Pasaporte veterinario / código', 'traits': 'Rasgos característicos', 'not_specified': 'no indicada', 'age': 'Edad', 'chip_label': 'Chip', 'passport': 'Pasaporte', 'edit': 'Editar', 'add_first_animal': 'Añade tu primer animal', 'user_support': 'Atención al usuario', 'write_to_support': 'Escribe a Atención al usuario.', 'write_message': 'Escribe tu mensaje', 'assistant_messages': 'Mensajes al asistente', 'no_user_messages': 'Aún no hay mensajes de usuarios.', 'select_contact': 'Selecciona un contacto de la izquierda.', 'reply': 'Responder', 'set_new_password': 'Establece tu nueva contraseña.', 'confirm_password': 'Confirmar contraseña', 'password_update_invalid': 'Las contraseñas deben coincidir y tener al menos 6 caracteres.', 'password_update_error': 'No se pudo actualizar la contraseña.'},
+    'de': {'add_animal': 'Tier hinzufügen', 'edit_animal': 'Tierprofil bearbeiten', 'upload_photo': 'Foto hochladen', 'animal_type': 'Tierart', 'species_or_breed': 'Art oder Rasse', 'vet_passport': 'Veterinärpass / Code', 'traits': 'Besondere Merkmale', 'not_specified': 'nicht angegeben', 'age': 'Alter', 'chip_label': 'Chip', 'passport': 'Pass', 'edit': 'Bearbeiten', 'add_first_animal': 'Fügen Sie Ihr erstes Tier hinzu', 'user_support': 'Benutzerhilfe', 'write_to_support': 'Schreiben Sie der Benutzerhilfe.', 'write_message': 'Nachricht schreiben', 'assistant_messages': 'Nachrichten an den Assistenten', 'no_user_messages': 'Noch keine Benutzernachrichten.', 'select_contact': 'Wählen Sie links einen Kontakt aus.', 'reply': 'Antworten', 'set_new_password': 'Legen Sie Ihr neues Passwort fest.', 'confirm_password': 'Passwort bestätigen', 'password_update_invalid': 'Die Passwörter müssen übereinstimmen und mindestens 6 Zeichen haben.', 'password_update_error': 'Das Passwort konnte nicht aktualisiert werden.'},
+    'nl': {'add_animal': 'Dier toevoegen', 'edit_animal': 'Dierprofiel bewerken', 'upload_photo': 'Foto uploaden', 'animal_type': 'Diersoort', 'species_or_breed': 'Soort of ras', 'vet_passport': 'Veterinair paspoort / code', 'traits': 'Kenmerkende eigenschappen', 'not_specified': 'niet opgegeven', 'age': 'Leeftijd', 'chip_label': 'Chip', 'passport': 'Paspoort', 'edit': 'Bewerken', 'add_first_animal': 'Voeg je eerste dier toe', 'user_support': 'Gebruikershulp', 'write_to_support': 'Schrijf naar de gebruikershulp.', 'write_message': 'Schrijf je bericht', 'assistant_messages': 'Berichten aan de assistent', 'no_user_messages': 'Nog geen gebruikersberichten.', 'select_contact': 'Selecteer links een contact.', 'reply': 'Beantwoorden', 'set_new_password': 'Stel uw nieuwe wachtwoord in.', 'confirm_password': 'Wachtwoord bevestigen', 'password_update_invalid': 'De wachtwoorden moeten overeenkomen en minimaal 6 tekens hebben.', 'password_update_error': 'Het wachtwoord kon niet worden bijgewerkt.'},
+    'fr': {'add_animal': 'Ajouter un animal', 'edit_animal': 'Modifier la fiche de l’animal', 'upload_photo': 'Ajouter une photo', 'animal_type': 'Type d’animal', 'species_or_breed': 'Espèce ou race', 'vet_passport': 'Passeport vétérinaire / code', 'traits': 'Caractéristiques', 'not_specified': 'non indiqué', 'age': 'Âge', 'chip_label': 'Puce', 'passport': 'Passeport', 'edit': 'Modifier', 'add_first_animal': 'Ajoutez votre premier animal', 'user_support': 'Assistance utilisateur', 'write_to_support': 'Écrivez à l’assistance utilisateur.', 'write_message': 'Écrivez votre message', 'assistant_messages': 'Messages à l’assistant', 'no_user_messages': 'Aucun message utilisateur pour le moment.', 'select_contact': 'Sélectionnez un contact à gauche.', 'reply': 'Répondre', 'set_new_password': 'Définissez votre nouveau mot de passe.', 'confirm_password': 'Confirmer le mot de passe', 'password_update_invalid': 'Les mots de passe doivent correspondre et comporter au moins 6 caractères.', 'password_update_error': 'Impossible de mettre à jour le mot de passe.'},
+    'en': {'add_animal': 'Add animal', 'edit_animal': 'Edit animal profile', 'upload_photo': 'Upload photo', 'animal_type': 'Animal type', 'species_or_breed': 'Species or breed', 'vet_passport': 'Veterinary passport / code', 'traits': 'Distinctive traits', 'not_specified': 'not specified', 'age': 'Age', 'chip_label': 'Chip', 'passport': 'Passport', 'edit': 'Edit', 'add_first_animal': 'Add your first animal', 'user_support': 'User support', 'write_to_support': 'Write to user support.', 'write_message': 'Write your message', 'assistant_messages': 'Messages to the assistant', 'no_user_messages': 'No user messages yet.', 'select_contact': 'Select a contact on the left.', 'reply': 'Reply', 'set_new_password': 'Set your new password.', 'confirm_password': 'Confirm password', 'password_update_invalid': 'Passwords must match and contain at least 6 characters.', 'password_update_error': 'Could not update the password.'},
+    'pt': {'add_animal': 'Adicionar animal', 'edit_animal': 'Editar ficha do animal', 'upload_photo': 'Enviar foto', 'animal_type': 'Tipo de animal', 'species_or_breed': 'Espécie ou raça', 'vet_passport': 'Passaporte veterinário / código', 'traits': 'Características', 'not_specified': 'não informado', 'age': 'Idade', 'chip_label': 'Chip', 'passport': 'Passaporte', 'edit': 'Editar', 'add_first_animal': 'Adicione seu primeiro animal', 'user_support': 'Atendimento ao usuário', 'write_to_support': 'Escreva para o atendimento ao usuário.', 'write_message': 'Escreva sua mensagem', 'assistant_messages': 'Mensagens ao assistente', 'no_user_messages': 'Ainda não há mensagens de usuários.', 'select_contact': 'Selecione um contato à esquerda.', 'reply': 'Responder', 'set_new_password': 'Defina sua nova senha.', 'confirm_password': 'Confirmar senha', 'password_update_invalid': 'As senhas devem ser iguais e ter pelo menos 6 caracteres.', 'password_update_error': 'Não foi possível atualizar a senha.'},
+  };
+
+  static const _sharedCareValues = {
+    'pl': {'shared_care': 'Wspólna opieka', 'shared_care_subtitle': 'Harmonogram i zmiany', 'horse_name': 'Imię konia', 'horse_owner': 'Właściciel konia', 'care_item': 'Lek lub zadanie', 'care_type': 'Rodzaj opieki', 'extra_food': 'Dodatkowy posiłek', 'extra_supplement': 'Dodatkowy suplement', 'assigned_user': 'Przypisana osoba', 'schedule': 'Data i godzina', 'monthly_summary': 'Podsumowanie miesiąca', 'completed': 'Wykonano', 'no_shared_care': 'Brak zaplanowanych wspólnych zadań.', 'mark_completed': 'Oznacz jako wykonane', 'shared_care_error': 'Nie udało się zapisać wspólnego zadania.'},
+    'es': {'shared_care': 'Cuidado compartido', 'shared_care_subtitle': 'Calendario y turnos', 'horse_name': 'Nombre del caballo', 'horse_owner': 'Dueño del caballo', 'care_item': 'Medicamento o tarea', 'care_type': 'Tipo de cuidado', 'extra_food': 'Comida extra', 'extra_supplement': 'Suplemento extra', 'assigned_user': 'Usuario asignado', 'schedule': 'Fecha y hora', 'monthly_summary': 'Resumen mensual', 'completed': 'Completado', 'no_shared_care': 'No hay tareas compartidas programadas.', 'mark_completed': 'Marcar como completado', 'shared_care_error': 'No se pudo guardar la tarea compartida.'},
+    'de': {'shared_care': 'Gemeinsame Pflege', 'shared_care_subtitle': 'Kalender und Dienste', 'horse_name': 'Name des Pferdes', 'horse_owner': 'Pferdebesitzer', 'care_item': 'Medikament oder Aufgabe', 'care_type': 'Pflegeart', 'extra_food': 'Zusatzfutter', 'extra_supplement': 'Zusatzpräparat', 'assigned_user': 'Zugewiesene Person', 'schedule': 'Datum und Uhrzeit', 'monthly_summary': 'Monatsübersicht', 'completed': 'Erledigt', 'no_shared_care': 'Keine gemeinsamen Aufgaben geplant.', 'mark_completed': 'Als erledigt markieren', 'shared_care_error': 'Die gemeinsame Aufgabe konnte nicht gespeichert werden.'},
+    'nl': {'shared_care': 'Gedeelde zorg', 'shared_care_subtitle': 'Kalender en beurten', 'horse_name': 'Naam van het paard', 'horse_owner': 'Paardeneigenaar', 'care_item': 'Medicijn of taak', 'care_type': 'Soort zorg', 'extra_food': 'Extra voer', 'extra_supplement': 'Extra supplement', 'assigned_user': 'Toegewezen gebruiker', 'schedule': 'Datum en tijd', 'monthly_summary': 'Maandoverzicht', 'completed': 'Voltooid', 'no_shared_care': 'Geen gedeelde taken gepland.', 'mark_completed': 'Markeren als voltooid', 'shared_care_error': 'De gedeelde taak kon niet worden opgeslagen.'},
+    'fr': {'shared_care': 'Soins partagés', 'shared_care_subtitle': 'Calendrier et roulement', 'horse_name': 'Nom du cheval', 'horse_owner': 'Propriétaire du cheval', 'care_item': 'Médicament ou tâche', 'care_type': 'Type de soins', 'extra_food': 'Repas supplémentaire', 'extra_supplement': 'Supplément', 'assigned_user': 'Utilisateur attribué', 'schedule': 'Date et heure', 'monthly_summary': 'Résumé mensuel', 'completed': 'Terminé', 'no_shared_care': 'Aucune tâche partagée programmée.', 'mark_completed': 'Marquer comme terminé', 'shared_care_error': 'Impossible d’enregistrer la tâche partagée.'},
+    'en': {'shared_care': 'Shared care', 'shared_care_subtitle': 'Calendar and shifts', 'horse_name': 'Horse name', 'horse_owner': 'Horse owner', 'care_item': 'Medication or task', 'care_type': 'Care type', 'extra_food': 'Extra food', 'extra_supplement': 'Extra supplement', 'assigned_user': 'Assigned user', 'schedule': 'Date and time', 'monthly_summary': 'Monthly summary', 'completed': 'Completed', 'no_shared_care': 'No shared tasks scheduled.', 'mark_completed': 'Mark as completed', 'shared_care_error': 'Could not save the shared task.'},
+    'pt': {'shared_care': 'Cuidados compartilhados', 'shared_care_subtitle': 'Calendário e turnos', 'horse_name': 'Nome do cavalo', 'horse_owner': 'Dono do cavalo', 'care_item': 'Medicamento ou tarefa', 'care_type': 'Tipo de cuidado', 'extra_food': 'Comida extra', 'extra_supplement': 'Suplemento extra', 'assigned_user': 'Usuário atribuído', 'schedule': 'Data e hora', 'monthly_summary': 'Resumo mensal', 'completed': 'Concluído', 'no_shared_care': 'Não há tarefas compartilhadas programadas.', 'mark_completed': 'Marcar como concluído', 'shared_care_error': 'Não foi possível salvar a tarefa compartilhada.'},
+  };
+
+  static const _interactionValues = {
+    'pl': {'reply': 'Odpowiedz', 'forward': 'Prześlij dalej', 'forwarded': 'Przekazano dalej', 'comments': 'Komentarze', 'write_comment': 'Napisz komentarz', 'no_comments': 'Brak komentarzy. Bądź pierwszy!', 'comment_reply': 'Odpowiedź dla'},
+    'es': {'reply': 'Responder', 'forward': 'Reenviar', 'forwarded': 'Reenviado', 'comments': 'Comentarios', 'write_comment': 'Escribe un comentario', 'no_comments': 'No hay comentarios. Sé el primero.', 'comment_reply': 'Respuesta para'},
+    'de': {'reply': 'Antworten', 'forward': 'Weiterleiten', 'forwarded': 'Weitergeleitet', 'comments': 'Kommentare', 'write_comment': 'Kommentar schreiben', 'no_comments': 'Noch keine Kommentare. Seien Sie der Erste.', 'comment_reply': 'Antwort an'},
+    'nl': {'reply': 'Beantwoorden', 'forward': 'Doorsturen', 'forwarded': 'Doorgestuurd', 'comments': 'Reacties', 'write_comment': 'Schrijf een reactie', 'no_comments': 'Nog geen reacties. Wees de eerste.', 'comment_reply': 'Antwoord aan'},
+    'fr': {'reply': 'Répondre', 'forward': 'Transférer', 'forwarded': 'Transféré', 'comments': 'Commentaires', 'write_comment': 'Écrivez un commentaire', 'no_comments': 'Aucun commentaire. Soyez le premier.', 'comment_reply': 'Réponse à'},
+    'en': {'reply': 'Reply', 'forward': 'Forward', 'forwarded': 'Forwarded', 'comments': 'Comments', 'write_comment': 'Write a comment', 'no_comments': 'No comments yet. Be the first.', 'comment_reply': 'Reply to'},
+    'pt': {'reply': 'Responder', 'forward': 'Encaminhar', 'forwarded': 'Encaminhado', 'comments': 'Comentários', 'write_comment': 'Escreva um comentário', 'no_comments': 'Ainda não há comentários. Seja o primeiro.', 'comment_reply': 'Responder a'},
+  };
+
+  static const _carePlanValues = {
+    'pl': {'edit_medication': 'Edytuj lek', 'delete_medication_confirm': 'Usunąć tę zaplanowaną pozycję?'},
+    'es': {'edit_medication': 'Editar medicación', 'delete_medication_confirm': '¿Eliminar esta medicación programada?'},
+    'de': {'edit_medication': 'Medikament bearbeiten', 'delete_medication_confirm': 'Dieses geplante Medikament löschen?'},
+    'nl': {'edit_medication': 'Medicatie bewerken', 'delete_medication_confirm': 'Deze geplande medicatie verwijderen?'},
+    'fr': {'edit_medication': 'Modifier le médicament', 'delete_medication_confirm': 'Supprimer ce médicament planifié ?'},
+    'en': {'edit_medication': 'Edit medication', 'delete_medication_confirm': 'Delete this scheduled medication?'},
+    'pt': {'edit_medication': 'Editar medicação', 'delete_medication_confirm': 'Excluir esta medicação programada?'},
+  };
+
+  static const _presenceValues = {
+    'pl': {'mark_active': 'Oznacz jako aktywny', 'active_since': 'Aktywny od'},
+    'es': {'mark_active': 'Marcar como activo', 'active_since': 'Activo desde'},
+    'de': {'mark_active': 'Als aktiv markieren', 'active_since': 'Aktiv seit'},
+    'nl': {'mark_active': 'Markeren als actief', 'active_since': 'Actief sinds'},
+    'fr': {'mark_active': 'Marquer comme actif', 'active_since': 'Actif depuis'},
+    'en': {'mark_active': 'Mark as active', 'active_since': 'Active since'},
+    'pt': {'mark_active': 'Marcar como ativo', 'active_since': 'Ativo desde'},
+  };
+
+  static String translate(AppLanguage language, String key) =>
+      _values[language.name]?[key] ?? _supplementalValues[language.name]?[key] ?? _sharedCareValues[language.name]?[key] ?? _interactionValues[language.name]?[key] ?? _carePlanValues[language.name]?[key] ?? _presenceValues[language.name]?[key] ?? _values['pl']![key] ?? _supplementalValues['pl']![key] ?? _sharedCareValues['pl']![key] ?? _interactionValues['pl']![key] ?? _carePlanValues['pl']![key] ?? _presenceValues['pl']![key] ?? key;
+
 }

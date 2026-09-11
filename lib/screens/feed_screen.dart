@@ -7,6 +7,7 @@ import '../models/feed_post.dart';
 import '../service/app_language.dart';
 import '../service/auth_service.dart';
 import '../service/feed_service.dart';
+import 'feed_comments_screen.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({super.key, required this.languageController});
@@ -22,6 +23,7 @@ class _FeedScreenState extends State<FeedScreen> {
   Map<String, int> reactionCounts = {};
   Map<String, String> userReactions = {};
   bool canModerate = false;
+  String? currentUserId;
   bool loading = true;
   Uint8List? pendingMediaBytes;
   String? pendingMediaType;
@@ -46,12 +48,14 @@ class _FeedScreenState extends State<FeedScreen> {
       final counts = await FeedService.reactionCounts();
       final reacted = await FeedService.userReactions();
       final moderator = await AuthService.isCurrentAdmin() || await AuthService.isCurrentOwner();
+      final currentUser = await AuthService.currentUser();
       if (!mounted) return;
       setState(() {
         posts = fetchedPosts;
         reactionCounts = counts;
         userReactions = reacted;
         canModerate = moderator;
+        currentUserId = currentUser?.id;
         loading = false;
       });
     } catch (_) {
@@ -68,11 +72,11 @@ class _FeedScreenState extends State<FeedScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: Text(AppText.get(language, 'delete_post')),
-        content: Text(AppText.get(language, 'delete_post_confirm')),
+        title: Text(AppText.translate(language, 'delete_post')),
+        content: Text(AppText.translate(language, 'delete_post_confirm')),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: Text(AppText.get(language, 'cancel'))),
-          FilledButton(onPressed: () => Navigator.pop(dialogContext, true), child: Text(AppText.get(language, 'delete'))),
+          TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: Text(AppText.translate(language, 'cancel'))),
+          FilledButton(onPressed: () => Navigator.pop(dialogContext, true), child: Text(AppText.translate(language, 'delete'))),
         ],
       ),
     );
@@ -130,11 +134,12 @@ class _FeedScreenState extends State<FeedScreen> {
       Navigator.pop(context);
       await _load();
     } catch (error) {
+      debugPrint('Feed post creation failed: $error');
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           duration: const Duration(seconds: 6),
-          content: Text('${AppText.get(language, 'post_error')} $error'),
+          content: Text(AppText.translate(language, 'post_error')),
         ),
       );
     }
@@ -149,7 +154,7 @@ class _FeedScreenState extends State<FeedScreen> {
       context: context,
       builder: (dialogContext) => StatefulBuilder(
         builder: (dialogContext, setDialogState) => AlertDialog(
-          title: Text(AppText.get(language, 'new_post')),
+          title: Text(AppText.translate(language, 'new_post')),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -158,7 +163,7 @@ class _FeedScreenState extends State<FeedScreen> {
                   controller: captionController,
                   maxLines: 3,
                   decoration: InputDecoration(
-                    labelText: AppText.get(language, 'post_caption_hint'),
+                    labelText: AppText.translate(language, 'post_caption_hint'),
                     border: const OutlineInputBorder(),
                   ),
                 ),
@@ -183,14 +188,14 @@ class _FeedScreenState extends State<FeedScreen> {
                     setDialogState(() {});
                   },
                   icon: const Icon(Icons.perm_media),
-                  label: Text(AppText.get(language, 'add_photo_video')),
+                  label: Text(AppText.translate(language, 'add_photo_video')),
                 ),
               ],
             ),
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(dialogContext), child: Text(AppText.get(language, 'cancel'))),
-            FilledButton(onPressed: () => _createPost(language), child: Text(AppText.get(language, 'publish'))),
+            TextButton(onPressed: () => Navigator.pop(dialogContext), child: Text(AppText.translate(language, 'cancel'))),
+            FilledButton(onPressed: () => _createPost(language), child: Text(AppText.translate(language, 'publish'))),
           ],
         ),
       ),
@@ -212,7 +217,7 @@ class _FeedScreenState extends State<FeedScreen> {
                   child: Image.asset('assets/images/equi_harmony_logo.png', height: 32, width: 32, fit: BoxFit.cover),
                 ),
                 const SizedBox(width: 10),
-                Flexible(child: Text(AppText.get(language, 'feed'), overflow: TextOverflow.ellipsis)),
+                Flexible(child: Text(AppText.translate(language, 'feed'), overflow: TextOverflow.ellipsis)),
               ],
             ),
           ),
@@ -220,7 +225,14 @@ class _FeedScreenState extends State<FeedScreen> {
             onPressed: () => _showCreatePostDialog(language),
             child: const Icon(Icons.add_a_photo),
           ),
-          body: loading
+          body: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/caballos_fondo.jpg'),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: loading
               ? const Center(child: CircularProgressIndicator())
               : posts.isEmpty
                   ? Center(
@@ -232,7 +244,7 @@ class _FeedScreenState extends State<FeedScreen> {
                             Icon(Icons.photo_library_outlined, size: 64, color: Theme.of(context).colorScheme.primary),
                             const SizedBox(height: 16),
                             Text(
-                              AppText.get(language, 'no_posts'),
+                              AppText.translate(language, 'no_posts'),
                               textAlign: TextAlign.center,
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
@@ -240,7 +252,7 @@ class _FeedScreenState extends State<FeedScreen> {
                             FilledButton.icon(
                               onPressed: () => _showCreatePostDialog(language),
                               icon: const Icon(Icons.add_a_photo),
-                              label: Text(AppText.get(language, 'new_post')),
+                              label: Text(AppText.translate(language, 'new_post')),
                             ),
                           ],
                         ),
@@ -264,9 +276,9 @@ class _FeedScreenState extends State<FeedScreen> {
                                   leading: const CircleAvatar(child: Icon(Icons.person)),
                                   title: Text(post.authorName),
                                   subtitle: Text(post.createdAt),
-                                  trailing: canModerate
+                                  trailing: canModerate || post.authorId == currentUserId
                                       ? IconButton(
-                                          tooltip: AppText.get(language, 'delete_post'),
+                                          tooltip: AppText.translate(language, 'delete_post'),
                                           onPressed: () => _deletePost(post, language),
                                           icon: const Icon(Icons.delete_outline, color: Colors.red),
                                         )
@@ -285,7 +297,7 @@ class _FeedScreenState extends State<FeedScreen> {
                                     child: OutlinedButton.icon(
                                       onPressed: () => launchUrl(Uri.parse(post.imageUrl!), mode: LaunchMode.externalApplication),
                                       icon: const Icon(Icons.play_circle_outline),
-                                      label: Text(AppText.get(language, 'play_video')),
+                                      label: Text(AppText.translate(language, 'play_video')),
                                     ),
                                   ),
                                 if (post.caption.isNotEmpty)
@@ -298,7 +310,7 @@ class _FeedScreenState extends State<FeedScreen> {
                                   child: Row(
                                     children: [
                                       PopupMenuButton<String>(
-                                        tooltip: AppText.get(language, 'reaction'),
+                                        tooltip: AppText.translate(language, 'reaction'),
                                         onSelected: (reaction) => _toggleReaction(post.id, reaction),
                                         icon: Icon(
                                           _reactionIcon(userReactions[post.id]),
@@ -316,9 +328,17 @@ class _FeedScreenState extends State<FeedScreen> {
                                       Text('$likes'),
                                       const SizedBox(width: 12),
                                       TextButton.icon(
-                                        onPressed: () => Navigator.pushNamed(context, '/chat'),
+                                        onPressed: () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => FeedCommentsScreen(
+                                              languageController: widget.languageController,
+                                              post: post,
+                                            ),
+                                          ),
+                                        ),
                                         icon: const Icon(Icons.chat_bubble_outline),
-                                        label: Text(AppText.get(language, 'comment')),
+                                        label: Text(AppText.translate(language, 'comment')),
                                       ),
                                     ],
                                   ),
@@ -329,6 +349,7 @@ class _FeedScreenState extends State<FeedScreen> {
                         },
                       ),
                     ),
+          ),
         );
       },
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../service/auth_service.dart';
 import '../service/app_language.dart';
+import '../service/notification_service.dart';
 
 class AdminLoginScreen extends StatefulWidget {
   const AdminLoginScreen({super.key, required this.languageController});
@@ -35,6 +36,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
       if (valid) {
         final user = await AuthService.currentUser();
         if (user != null && user.isAdmin) {
+          await NotificationService.registerCurrentDevice();
           if (!mounted) return;
           Navigator.pushNamedAndRemoveUntil(context, '/dashboard', (route) => false);
           return;
@@ -49,7 +51,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
     final language = widget.languageController.language;
     setState(() => loading = false);
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(AppText.get(language, 'invalid_admin_credentials'))),
+      SnackBar(content: Text(AppText.translate(language, 'invalid_admin_credentials'))),
     );
   }
 
@@ -60,14 +62,14 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
       builder: (context, _) {
         final language = widget.languageController.language;
         return Scaffold(
-          appBar: AppBar(title: Text(AppText.get(language, 'admin_access'))),
+          appBar: AppBar(title: Text(AppText.translate(language, 'admin_access'))),
           body: ListView(
             padding: const EdgeInsets.all(24),
             children: [
               const Icon(Icons.admin_panel_settings, size: 72, color: Colors.teal),
               const SizedBox(height: 20),
               Text(
-                AppText.get(language, 'admin_only_access'),
+                AppText.translate(language, 'admin_only_access'),
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
@@ -76,7 +78,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
-                  labelText: AppText.get(language, 'admin_email'),
+                  labelText: AppText.translate(language, 'admin_email'),
                   border: const OutlineInputBorder(),
                 ),
               ),
@@ -85,7 +87,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                 controller: passwordController,
                 obscureText: hidePassword,
                 decoration: InputDecoration(
-                  labelText: AppText.get(language, 'password'),
+                  labelText: AppText.translate(language, 'password'),
                   border: const OutlineInputBorder(),
                   suffixIcon: IconButton(
                     onPressed: () => setState(() => hidePassword = !hidePassword),
@@ -103,7 +105,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
                     : const Icon(Icons.login),
-                label: Text(loading ? AppText.get(language, 'checking') : AppText.get(language, 'enter_as_admin')),
+                label: Text(loading ? AppText.translate(language, 'checking') : AppText.translate(language, 'enter_as_admin')),
               ),
             ],
           ),

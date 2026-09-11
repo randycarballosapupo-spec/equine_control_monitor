@@ -46,30 +46,30 @@ class _RecordsScreenState extends State<RecordsScreen> {
     final result = await showDialog<Map<String, String>>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(AppText.get(language, 'add_record')),
+        title: Text(AppText.translate(language, 'add_record')),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
               controller: titleController,
-              decoration: InputDecoration(labelText: AppText.get(language, 'record_title')),
+              decoration: InputDecoration(labelText: AppText.translate(language, 'record_title')),
             ),
             TextField(
               controller: detailsController,
               maxLines: 3,
-              decoration: InputDecoration(labelText: AppText.get(language, 'details')),
+              decoration: InputDecoration(labelText: AppText.translate(language, 'details')),
             ),
           ],
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: Text(AppText.get(language, 'cancel'))),
+          TextButton(onPressed: () => Navigator.pop(context), child: Text(AppText.translate(language, 'cancel'))),
           FilledButton(
             onPressed: () => Navigator.pop(context, {
               'title': titleController.text.trim(),
               'details': detailsController.text.trim(),
               'date': DateTime.now().toIso8601String(),
             }),
-            child: Text(AppText.get(language, 'save')),
+            child: Text(AppText.translate(language, 'save')),
           ),
         ],
       ),
@@ -88,14 +88,14 @@ class _RecordsScreenState extends State<RecordsScreen> {
     final result = await showDialog<Map<String, String>>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(AppText.get(language, 'edit_record')),
+        title: Text(AppText.translate(language, 'edit_record')),
         content: Column(mainAxisSize: MainAxisSize.min, children: [
-          TextField(controller: titleController, decoration: InputDecoration(labelText: AppText.get(language, 'record_title'))),
-          TextField(controller: detailsController, maxLines: 4, decoration: InputDecoration(labelText: AppText.get(language, 'details'))),
+          TextField(controller: titleController, decoration: InputDecoration(labelText: AppText.translate(language, 'record_title'))),
+          TextField(controller: detailsController, maxLines: 4, decoration: InputDecoration(labelText: AppText.translate(language, 'details'))),
         ]),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: Text(AppText.get(language, 'cancel'))),
-          FilledButton(onPressed: () => Navigator.pop(context, {'title': titleController.text.trim(), 'details': detailsController.text.trim(), 'date': records[index]['date'] ?? DateTime.now().toIso8601String()}), child: Text(AppText.get(language, 'save'))),
+          TextButton(onPressed: () => Navigator.pop(context), child: Text(AppText.translate(language, 'cancel'))),
+          FilledButton(onPressed: () => Navigator.pop(context, {'title': titleController.text.trim(), 'details': detailsController.text.trim(), 'date': records[index]['date'] ?? DateTime.now().toIso8601String()}), child: Text(AppText.translate(language, 'save'))),
         ],
       ),
     );
@@ -119,17 +119,17 @@ class _RecordsScreenState extends State<RecordsScreen> {
         final language = widget.languageController.language;
         return Scaffold(
           appBar: AppBar(
-            title: Text(AppText.get(language, 'records')),
+            title: Text(AppText.translate(language, 'records')),
             actions: [
               IconButton(
-                tooltip: AppText.get(language, 'add'),
+                tooltip: AppText.translate(language, 'add'),
                 onPressed: _addRecord,
                 icon: const Icon(Icons.add),
               ),
             ],
           ),
           body: records.isEmpty
-              ? Center(child: Text(AppText.get(language, 'no_records')))
+              ? Center(child: Text(AppText.translate(language, 'no_records')))
               : ListView.builder(
                   padding: const EdgeInsets.all(16),
                   itemCount: records.length,
@@ -145,8 +145,8 @@ class _RecordsScreenState extends State<RecordsScreen> {
                           PopupMenuButton<String>(
                             onSelected: (value) => value == 'edit' ? _editRecord(index) : _deleteRecord(index),
                             itemBuilder: (context) => [
-                              PopupMenuItem(value: 'edit', child: Text(AppText.get(language, 'edit_record'))),
-                              PopupMenuItem(value: 'delete', child: Text(AppText.get(language, 'delete'))),
+                              PopupMenuItem(value: 'edit', child: Text(AppText.translate(language, 'edit_record'))),
+                              PopupMenuItem(value: 'delete', child: Text(AppText.translate(language, 'delete'))),
                             ],
                           ),
                         ]),
@@ -156,7 +156,7 @@ class _RecordsScreenState extends State<RecordsScreen> {
                 ),
           floatingActionButton: FloatingActionButton(
             onPressed: _addRecord,
-            tooltip: AppText.get(language, 'add'),
+            tooltip: AppText.translate(language, 'add'),
             child: const Icon(Icons.add),
           ),
         );

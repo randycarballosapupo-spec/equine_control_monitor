@@ -47,7 +47,7 @@ class _MonitoringScreenState extends State<MonitoringScreen> {
       builder: (context, _) {
         final language = widget.languageController.language;
         return Scaffold(
-          appBar: AppBar(title: Text(AppText.get(language, 'monitoring'))),
+          appBar: AppBar(title: Text(AppText.translate(language, 'monitoring'))),
           body: ListView(
             padding: const EdgeInsets.all(20),
             children: [
@@ -55,18 +55,18 @@ class _MonitoringScreenState extends State<MonitoringScreen> {
                 children: [
                   const Icon(Icons.bluetooth_connected, color: Colors.teal),
                   const SizedBox(width: 8),
-                  Text(AppText.get(language, 'connected_sensor')),
+                  Text(AppText.translate(language, 'connected_sensor')),
                   const Spacer(),
-                  Chip(label: Text(AppText.get(language, 'live'))),
+                  Chip(label: Text(AppText.translate(language, 'live'))),
                 ],
               ),
               const SizedBox(height: 20),
-              _readingCard(context, AppText.get(language, 'temperature'), temperature, '°C', Icons.thermostat, Colors.orange),
-              _readingCard(context, AppText.get(language, 'humidity'), humidity, '%', Icons.water_drop, Colors.blue),
-              _readingCard(context, AppText.get(language, 'ammonia'), ammonia, 'ppm', Icons.warning_amber, Colors.red),
-              _readingCard(context, AppText.get(language, 'air_quality'), airQuality, '/100', Icons.air, Colors.teal),
+              _readingCard(context, AppText.translate(language, 'temperature'), temperature, '°C', Icons.thermostat, Colors.orange),
+              _readingCard(context, AppText.translate(language, 'humidity'), humidity, '%', Icons.water_drop, Colors.blue),
+              _readingCard(context, AppText.translate(language, 'ammonia'), ammonia, 'ppm', Icons.warning_amber, Colors.red),
+              _readingCard(context, AppText.translate(language, 'air_quality'), airQuality, '/100', Icons.air, Colors.teal),
               const SizedBox(height: 12),
-              Text(AppText.get(language, 'sensor_notice'), style: Theme.of(context).textTheme.bodySmall),
+              Text(AppText.translate(language, 'sensor_notice'), style: Theme.of(context).textTheme.bodySmall),
             ],
           ),
         );

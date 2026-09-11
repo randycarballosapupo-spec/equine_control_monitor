@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/app_user.dart';
 import 'supabase_config.dart';
 
@@ -173,7 +174,7 @@ class AuthService {
     required String stableName,
   }) async {
     final isOwner = await isCurrentOwner();
-    if (!isOwner && (!await isCurrentPrimaryAdmin() || await administratorCount() >= 5)) return false;
+    if (!isOwner) return false;
     return _createApprovedUser(
       email: email,
       password: password,
@@ -192,8 +193,7 @@ class AuthService {
     required List<String> roles,
   }) async {
     final isOwner = await isCurrentOwner();
-    final isPrimary = await isCurrentPrimaryAdmin();
-    if (!isOwner && !isPrimary) return false;
+    if (!isOwner) return false;
     return _createApprovedUser(
       email: email,
       password: password,
@@ -210,34 +210,18 @@ class AuthService {
     required String stableName,
     required List<String> roles,
   }) async {
-    final normalizedEmail = email.trim().toLowerCase();
-    final previousSession = _client.auth.currentSession;
     try {
-      final auth = await _client.auth.signUp(email: normalizedEmail, password: password.trim());
-      final user = auth.user;
-      if (user == null) return false;
-      await _client.from(_table).insert({
-        'id': user.id,
-        'email': normalizedEmail,
+      await _client.functions.invoke('create-user', body: {
+        'email': email.trim().toLowerCase(),
+        'password': password.trim(),
         'name': name.trim(),
+        'stableName': stableName.trim(),
         'roles': roles,
-        'stable_name': stableName.trim(),
-        'status': 'approved',
       });
       return true;
-    } catch (_) {
+    } catch (error) {
+      debugPrint('Creator user creation failed: $error');
       return false;
-    } finally {
-      // Creating a user via signUp() switches the active session to the new
-      // account. Restore the previous admin/owner's session so they stay logged in.
-      final refreshToken = previousSession?.refreshToken;
-      if (refreshToken != null) {
-        try {
-          await _client.auth.setSession(refreshToken);
-        } catch (_) {
-          // If restoring fails, the admin will simply need to log in again.
-        }
-      }
     }
   }
 
@@ -278,7 +262,19 @@ class AuthService {
 
   static Future<bool> resetPassword(String email) async {
     try {
-      await _client.auth.resetPasswordForEmail(email.trim().toLowerCase());
+      await _client.auth.resetPasswordForEmail(
+        email.trim().toLowerCase(),
+        redirectTo: 'equiharmony://reset-password',
+      );
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  static Future<bool> updatePassword(String password) async {
+    try {
+      await _client.auth.updateUser(UserAttributes(password: password));
       return true;
     } catch (_) {
       return false;

@@ -35,6 +35,7 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
   }
 
   Future<void> _edit([int? index]) async {
+    final language = widget.languageController.language;
     final old = index == null ? <String, String>{} : animals[index];
     final name = TextEditingController(text: old['name']);
     final breed = TextEditingController(text: old['breed']);
@@ -52,7 +53,7 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
       context: context,
       builder: (dialogContext) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
-          title: Text(index == null ? 'Añadir animal' : 'Editar ficha animal'),
+          title: Text(AppText.translate(language, index == null ? 'add_animal' : 'edit_animal')),
           content: SingleChildScrollView(
             child: Column(
               children: [
@@ -65,7 +66,7 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
                       child: photoBytes == null ? Text(animalTypes[selectedType] ?? '🐾', style: const TextStyle(fontSize: 34)) : null,
                     ),
                     IconButton.filled(
-                      tooltip: 'Subir foto',
+                      tooltip: AppText.translate(language, 'upload_photo'),
                       onPressed: () async {
                         final picked = await FilePicker.pickFiles(type: FileType.image);
                         if (picked.isEmpty) return;
@@ -77,9 +78,9 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
                   ],
                 ),
                 const SizedBox(height: 12),
-                TextField(controller: name, decoration: const InputDecoration(labelText: 'Nombre')),
+                TextField(controller: name, decoration: InputDecoration(labelText: AppText.translate(language, 'name'))),
                 const SizedBox(height: 10),
-                const Align(alignment: Alignment.centerLeft, child: Text('Tipo de animal')),
+                Align(alignment: Alignment.centerLeft, child: Text(AppText.translate(language, 'animal_type'))),
                 Wrap(
                   spacing: 6,
                   children: animalTypes.entries.map((entry) => ChoiceChip(
@@ -88,11 +89,11 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
                     onSelected: (_) => setDialogState(() => selectedType = entry.key),
                   )).toList(),
                 ),
-                TextField(controller: breed, decoration: const InputDecoration(labelText: 'Raza o especie')),
+                TextField(controller: breed, decoration: InputDecoration(labelText: AppText.translate(language, 'species_or_breed'))),
                 TextField(
                   controller: birthDate,
                   readOnly: true,
-                  decoration: const InputDecoration(labelText: 'Fecha de nacimiento', suffixIcon: Icon(Icons.calendar_month)),
+                  decoration: InputDecoration(labelText: AppText.translate(language, 'birth_date'), suffixIcon: const Icon(Icons.calendar_month)),
                   onTap: () async {
                     final picked = await showDatePicker(
                       context: context,
@@ -103,15 +104,15 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
                     if (picked != null) birthDate.text = picked.toIso8601String().split('T').first;
                   },
                 ),
-                TextField(controller: chip, decoration: const InputDecoration(labelText: 'Número de chip')),
-                TextField(controller: passport, decoration: const InputDecoration(labelText: 'Pasaporte veterinario / código')),
-                TextField(controller: observations, maxLines: 3, decoration: const InputDecoration(labelText: 'Observaciones')),
-                TextField(controller: traits, maxLines: 3, decoration: const InputDecoration(labelText: 'Rasgos característicos')),
+                TextField(controller: chip, decoration: InputDecoration(labelText: AppText.translate(language, 'microchip'))),
+                TextField(controller: passport, decoration: InputDecoration(labelText: AppText.translate(language, 'vet_passport'))),
+                TextField(controller: observations, maxLines: 3, decoration: InputDecoration(labelText: AppText.translate(language, 'notes'))),
+                TextField(controller: traits, maxLines: 3, decoration: InputDecoration(labelText: AppText.translate(language, 'traits'))),
               ],
             ),
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(dialogContext), child: const Text('Cancelar')),
+            TextButton(onPressed: () => Navigator.pop(dialogContext), child: Text(AppText.translate(language, 'cancel'))),
             FilledButton(
               onPressed: () => Navigator.pop(dialogContext, {
                 'name': name.text.trim(),
@@ -124,7 +125,7 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
                 'traits': traits.text.trim(),
                 'photo': photoBytes == null ? '' : base64Encode(photoBytes!),
               }),
-              child: const Text('Guardar'),
+              child: Text(AppText.translate(language, 'save')),
             ),
           ],
         ),
@@ -149,22 +150,24 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
     await _save();
   }
 
-  String _age(String? value) {
+  String _age(String? value, AppLanguage language) {
     final date = DateTime.tryParse(value ?? '');
-    if (date == null) return 'no indicada';
+    if (date == null) return AppText.translate(language, 'not_specified');
     final now = DateTime.now();
     var years = now.year - date.year;
     if (now.month < date.month || (now.month == date.month && now.day < date.day)) years--;
-    return '$years años';
+    return '$years';
   }
 
   @override
   Widget build(BuildContext context) => AnimatedBuilder(
         animation: widget.languageController,
-        builder: (context, _) => Scaffold(
-          appBar: AppBar(title: const Text('Tus amigos')),
+        builder: (context, _) {
+          final language = widget.languageController.language;
+          return Scaffold(
+          appBar: AppBar(title: Text(AppText.translate(language, 'your_friends'))),
           body: animals.isEmpty
-              ? const Center(child: Text('Añade tu primer animal'))
+              ? Center(child: Text(AppText.translate(language, 'add_first_animal')))
               : ListView.builder(
                   padding: const EdgeInsets.fromLTRB(12, 12, 12, 100),
                   itemCount: animals.length,
@@ -178,13 +181,13 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
                             ? CircleAvatar(backgroundImage: MemoryImage(base64Decode(photo)))
                             : Text(icon, style: const TextStyle(fontSize: 30)),
                         title: Text(animal['name'] ?? ''),
-                        subtitle: Text('${animal['type']} · ${animal['breed']}\nEdad: ${_age(animal['birthDate'])} · Chip: ${animal['chip']}\nPasaporte: ${animal['passport']}\n${animal['observations']}\nRasgos: ${animal['traits']}'),
+                        subtitle: Text('${animal['type']} · ${animal['breed']}\n${AppText.translate(language, 'age')}: ${_age(animal['birthDate'], language)} · ${AppText.translate(language, 'chip_label')}: ${animal['chip']}\n${AppText.translate(language, 'passport')}: ${animal['passport']}\n${animal['observations']}\n${AppText.translate(language, 'traits')}: ${animal['traits']}'),
                         isThreeLine: true,
                         trailing: PopupMenuButton<String>(
                           onSelected: (value) => value == 'edit' ? _edit(index) : _delete(index),
-                          itemBuilder: (context) => const [
-                            PopupMenuItem(value: 'edit', child: Text('Editar')),
-                            PopupMenuItem(value: 'delete', child: Text('Eliminar')),
+                          itemBuilder: (context) => [
+                            PopupMenuItem(value: 'edit', child: Text(AppText.translate(language, 'edit'))),
+                            PopupMenuItem(value: 'delete', child: Text(AppText.translate(language, 'delete'))),
                           ],
                         ),
                       ),
@@ -192,6 +195,7 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
                   },
                 ),
           floatingActionButton: FloatingActionButton(onPressed: _edit, child: const Icon(Icons.add)),
-        ),
+        );
+        },
       );
 }

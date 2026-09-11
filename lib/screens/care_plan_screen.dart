@@ -39,27 +39,28 @@ class _CarePlanScreenState extends State<CarePlanScreen> {
     await prefs.setString(storageKey!, jsonEncode(items));
   }
 
-  Future<void> _addMedication() async {
-    final name = TextEditingController();
-    final dose = TextEditingController();
-    DateTime selectedDate = DateTime.now();
-    String frequency = 'daily';
+  Future<void> _editMedication([int? index]) async {
+    final existing = index == null ? <String, String>{} : items[index];
+    final name = TextEditingController(text: existing['name']);
+    final dose = TextEditingController(text: existing['dose']);
+    DateTime selectedDate = DateTime.tryParse(existing['date'] ?? '') ?? DateTime.now();
+    String frequency = existing['frequency'] ?? 'daily';
     final language = widget.languageController.language;
     final result = await showDialog<Map<String, String>>(
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
-          title: Text(AppText.get(language, 'add_medication')),
+          title: Text(AppText.translate(language, index == null ? 'add_medication' : 'edit_medication')),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: name,
-                decoration: InputDecoration(labelText: AppText.get(language, 'medication')),
+                decoration: InputDecoration(labelText: AppText.translate(language, 'medication')),
               ),
               TextField(
                 controller: dose,
-                decoration: InputDecoration(labelText: AppText.get(language, 'dose')),
+                decoration: InputDecoration(labelText: AppText.translate(language, 'dose')),
               ),
               const SizedBox(height: 12),
               OutlinedButton.icon(
@@ -77,11 +78,11 @@ class _CarePlanScreenState extends State<CarePlanScreen> {
               ),
               DropdownButtonFormField<String>(
                 initialValue: frequency,
-                decoration: InputDecoration(labelText: AppText.get(language, 'frequency')),
+                decoration: InputDecoration(labelText: AppText.translate(language, 'frequency')),
                 items: [
-                  DropdownMenuItem(value: 'daily', child: Text(AppText.get(language, 'daily'))),
-                  DropdownMenuItem(value: 'weekly', child: Text(AppText.get(language, 'weekly'))),
-                  DropdownMenuItem(value: 'once', child: Text(AppText.get(language, 'once'))),
+                  DropdownMenuItem(value: 'daily', child: Text(AppText.translate(language, 'daily'))),
+                  DropdownMenuItem(value: 'weekly', child: Text(AppText.translate(language, 'weekly'))),
+                  DropdownMenuItem(value: 'once', child: Text(AppText.translate(language, 'once'))),
                 ],
                 onChanged: (value) {
                   if (value != null) setDialogState(() => frequency = value);
@@ -90,7 +91,7 @@ class _CarePlanScreenState extends State<CarePlanScreen> {
             ],
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(context), child: Text(AppText.get(language, 'cancel'))),
+            TextButton(onPressed: () => Navigator.pop(context), child: Text(AppText.translate(language, 'cancel'))),
             FilledButton(
               onPressed: () => Navigator.pop(context, {
                 'name': name.text.trim(),
@@ -98,7 +99,7 @@ class _CarePlanScreenState extends State<CarePlanScreen> {
                 'date': selectedDate.toIso8601String(),
                 'frequency': frequency,
               }),
-              child: Text(AppText.get(language, 'save')),
+              child: Text(AppText.translate(language, 'save')),
             ),
           ],
         ),
@@ -107,7 +108,30 @@ class _CarePlanScreenState extends State<CarePlanScreen> {
     name.dispose();
     dose.dispose();
     if (result == null || result['name']!.isEmpty || !mounted) return;
-    setState(() => items.add(result));
+    setState(() {
+      if (index == null) {
+        items.add(result);
+      } else {
+        items[index] = result;
+      }
+    });
+    await _saveItems();
+  }
+
+  Future<void> _deleteMedication(int index, AppLanguage language) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(AppText.translate(language, 'delete')),
+        content: Text(AppText.translate(language, 'delete_medication_confirm')),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: Text(AppText.translate(language, 'cancel'))),
+          FilledButton(onPressed: () => Navigator.pop(dialogContext, true), child: Text(AppText.translate(language, 'delete'))),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+    setState(() => items.removeAt(index));
     await _saveItems();
   }
 
@@ -119,13 +143,13 @@ class _CarePlanScreenState extends State<CarePlanScreen> {
         final language = widget.languageController.language;
         return Scaffold(
           appBar: AppBar(
-            title: Text(AppText.get(language, 'care_plan')),
+            title: Text(AppText.translate(language, 'care_plan')),
             actions: [
-              IconButton(onPressed: _addMedication, icon: const Icon(Icons.add), tooltip: AppText.get(language, 'add')),
+              IconButton(onPressed: _editMedication, icon: const Icon(Icons.add), tooltip: AppText.translate(language, 'add')),
             ],
           ),
           body: items.isEmpty
-              ? Center(child: Text(AppText.get(language, 'no_medication')))
+              ? Center(child: Text(AppText.translate(language, 'no_medication')))
               : ListView.builder(
                   padding: const EdgeInsets.all(16),
                   itemCount: items.length,
@@ -136,15 +160,22 @@ class _CarePlanScreenState extends State<CarePlanScreen> {
                       child: ListTile(
                         leading: const CircleAvatar(child: Icon(Icons.medication)),
                         title: Text(item['name'] ?? ''),
-                        subtitle: Text('${item['dose'] ?? ''}\n${AppText.get(language, 'frequency')}: ${AppText.get(language, item['frequency'] ?? 'once')}\n${AppText.get(language, 'next_date')}: ${date.day}/${date.month}/${date.year}'),
+                        subtitle: Text('${item['dose'] ?? ''}\n${AppText.translate(language, 'frequency')}: ${AppText.translate(language, item['frequency'] ?? 'once')}\n${AppText.translate(language, 'next_date')}: ${date.day}/${date.month}/${date.year}'),
                         isThreeLine: true,
+                        trailing: PopupMenuButton<String>(
+                          onSelected: (value) => value == 'edit' ? _editMedication(index) : _deleteMedication(index, language),
+                          itemBuilder: (context) => [
+                            PopupMenuItem(value: 'edit', child: Text(AppText.translate(language, 'edit'))),
+                            PopupMenuItem(value: 'delete', child: Text(AppText.translate(language, 'delete'))),
+                          ],
+                        ),
                       ),
                     );
                   },
                 ),
           floatingActionButton: FloatingActionButton(
-            onPressed: _addMedication,
-            tooltip: AppText.get(language, 'add'),
+            onPressed: _editMedication,
+            tooltip: AppText.translate(language, 'add'),
             child: const Icon(Icons.add),
           ),
         );

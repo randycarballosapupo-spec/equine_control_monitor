@@ -74,7 +74,7 @@ class _ProfileFormScreenState extends State<ProfileFormScreen> {
     if (photoBytes != null) await prefs.setString('${prefix}_photo', base64Encode(photoBytes!));
     if (!mounted) return;
     final language = widget.languageController.language;
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppText.get(language, 'saved'))));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppText.translate(language, 'saved'))));
   }
 
   Future<void> _selectPhoto() async {
@@ -117,7 +117,7 @@ class _ProfileFormScreenState extends State<ProfileFormScreen> {
       animation: widget.languageController,
       builder: (context, _) {
         final language = widget.languageController.language;
-        final title = AppText.get(language, widget.isOwner
+        final title = AppText.translate(language, widget.isOwner
             ? 'owner_card'
             : widget.isHorse
                 ? 'horse_card'
@@ -144,7 +144,7 @@ class _ProfileFormScreenState extends State<ProfileFormScreen> {
                   ],
                 ),
                 const SizedBox(height: 20),
-                _field(nameController, AppText.get(language, 'name')),
+                _field(nameController, AppText.translate(language, 'name')),
                 const SizedBox(height: 14),
                 _dateField(language),
                 const SizedBox(height: 14),
@@ -152,24 +152,24 @@ class _ProfileFormScreenState extends State<ProfileFormScreen> {
                   _privateIdentifierField(language),
                   const SizedBox(height: 14),
                 ],
-                _field(addressController, AppText.get(language, widget.isHorse ? 'current_address' : 'address')),
+                _field(addressController, AppText.translate(language, widget.isHorse ? 'current_address' : 'address')),
                 const SizedBox(height: 14),
                 if (!widget.isHorse) ...[
-                  _field(phoneController, AppText.get(language, 'phone'), keyboardType: TextInputType.phone),
+                  _field(phoneController, AppText.translate(language, 'phone'), keyboardType: TextInputType.phone),
                   const SizedBox(height: 14),
                 ],
                 if (widget.isHorse)
-                  _field(secondaryController, AppText.get(language, 'pathologies'), maxLines: 4)
+                  _field(secondaryController, AppText.translate(language, 'pathologies'), maxLines: 4)
                 else if (widget.isOwner)
-                  _field(secondaryController, AppText.get(language, 'horses_owned'), maxLines: 2)
+                  _field(secondaryController, AppText.translate(language, 'horses_owned'), maxLines: 2)
                 else ...[
-                  _field(secondaryController, AppText.get(language, 'license_number')),
+                  _field(secondaryController, AppText.translate(language, 'license_number')),
                   const SizedBox(height: 14),
-                  _field(notesController, AppText.get(language, 'clinic_address'), maxLines: 3),
+                  _field(notesController, AppText.translate(language, 'clinic_address'), maxLines: 3),
                 ],
                 if (widget.isHorse || widget.isOwner) ...[
                   const SizedBox(height: 14),
-                  _field(notesController, AppText.get(language, 'notes'), maxLines: 4),
+                  _field(notesController, AppText.translate(language, 'notes'), maxLines: 4),
                 ],
                 const SizedBox(height: 24),
                 SizedBox(
@@ -177,7 +177,7 @@ class _ProfileFormScreenState extends State<ProfileFormScreen> {
                   child: FilledButton.icon(
                     onPressed: _saveProfile,
                     icon: const Icon(Icons.save),
-                    label: Text(AppText.get(language, 'save')),
+                    label: Text(AppText.translate(language, 'save')),
                   ),
                 ),
               ],
@@ -202,7 +202,7 @@ class _ProfileFormScreenState extends State<ProfileFormScreen> {
       controller: dateController,
       readOnly: true,
       decoration: InputDecoration(
-        labelText: AppText.get(language, 'birth_date'),
+        labelText: AppText.translate(language, 'birth_date'),
         border: const OutlineInputBorder(),
         suffixIcon: IconButton(onPressed: _selectDate, icon: const Icon(Icons.calendar_month)),
       ),
@@ -214,11 +214,11 @@ class _ProfileFormScreenState extends State<ProfileFormScreen> {
       controller: identifierController,
       obscureText: !showPrivateIdentifier,
       decoration: InputDecoration(
-        labelText: AppText.get(language, widget.isHorse ? 'horse_id' : 'national_id'),
-        helperText: AppText.get(language, 'private_data_notice'),
+        labelText: AppText.translate(language, widget.isHorse ? 'horse_id' : 'national_id'),
+        helperText: AppText.translate(language, 'private_data_notice'),
         border: const OutlineInputBorder(),
         suffixIcon: IconButton(
-          tooltip: showPrivateIdentifier ? AppText.get(language, 'hide_data') : AppText.get(language, 'show_data'),
+          tooltip: showPrivateIdentifier ? AppText.translate(language, 'hide_data') : AppText.translate(language, 'show_data'),
           onPressed: () => setState(() => showPrivateIdentifier = !showPrivateIdentifier),
           icon: Icon(showPrivateIdentifier ? Icons.visibility_off : Icons.visibility),
         ),

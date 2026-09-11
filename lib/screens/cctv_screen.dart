@@ -45,23 +45,23 @@ class _CctvScreenState extends State<CctvScreen> {
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(AppText.get(language, 'add_camera_title')),
+        title: Text(AppText.translate(language, 'add_camera_title')),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextField(controller: name, decoration: InputDecoration(labelText: AppText.get(language, 'camera_name'))),
-            TextField(controller: url, decoration: InputDecoration(labelText: AppText.get(language, 'camera_url'), hintText: 'rtsp://... o http://192.168.1.20')),
+            TextField(controller: name, decoration: InputDecoration(labelText: AppText.translate(language, 'camera_name'))),
+            TextField(controller: url, decoration: InputDecoration(labelText: AppText.translate(language, 'camera_url'), hintText: 'rtsp://... o http://192.168.1.20')),
           ],
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: Text(AppText.get(language, 'cancel'))),
+          TextButton(onPressed: () => Navigator.pop(context, false), child: Text(AppText.translate(language, 'cancel'))),
           FilledButton(
             onPressed: () {
               if (name.text.trim().isEmpty || url.text.trim().isEmpty) return;
               cameras.add({'name': name.text.trim(), 'url': url.text.trim()});
               Navigator.pop(context, true);
             },
-            child: Text(AppText.get(language, 'save')),
+            child: Text(AppText.translate(language, 'save')),
           ),
         ],
       ),
@@ -78,7 +78,7 @@ class _CctvScreenState extends State<CctvScreen> {
     final uri = Uri.tryParse(url);
     if (uri == null || !await launchUrl(uri, mode: LaunchMode.externalApplication)) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppText.get(language, 'camera_open_error'))));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppText.translate(language, 'camera_open_error'))));
     }
   }
 
@@ -90,11 +90,11 @@ class _CctvScreenState extends State<CctvScreen> {
         final language = widget.languageController.language;
         return Scaffold(
           appBar: AppBar(
-            title: Text(AppText.get(language, 'cctv')),
-            actions: [IconButton(onPressed: () => _addCamera(language), icon: const Icon(Icons.add_a_photo), tooltip: AppText.get(language, 'add_camera'))],
+            title: Text(AppText.translate(language, 'cctv')),
+            actions: [IconButton(onPressed: () => _addCamera(language), icon: const Icon(Icons.add_a_photo), tooltip: AppText.translate(language, 'add_camera'))],
           ),
           body: cameras.isEmpty
-              ? Center(child: Text(AppText.get(language, 'no_cameras')))
+              ? Center(child: Text(AppText.translate(language, 'no_cameras')))
               : ListView.builder(
                   padding: const EdgeInsets.all(16),
                   itemCount: cameras.length,

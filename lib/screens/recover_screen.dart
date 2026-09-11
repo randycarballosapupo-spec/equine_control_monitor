@@ -29,7 +29,7 @@ class _RecoverScreenState extends State<RecoverScreen> {
     setState(() => isSending = false);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(AppText.get(language, sent ? 'reset_link_sent' : 'email_not_found')),
+        content: Text(AppText.translate(language, sent ? 'reset_link_sent' : 'email_not_found')),
       ),
     );
     if (sent) Navigator.pop(context);
@@ -42,17 +42,17 @@ class _RecoverScreenState extends State<RecoverScreen> {
       builder: (context, _) {
         final language = widget.languageController.language;
         return Scaffold(
-          appBar: AppBar(title: Text(AppText.get(language, 'reset_password'))),
+          appBar: AppBar(title: Text(AppText.translate(language, 'reset_password'))),
           body: ListView(
             padding: const EdgeInsets.all(20),
             children: [
-              Text(AppText.get(language, 'reset_link_instructions')),
+              Text(AppText.translate(language, 'reset_link_instructions')),
               const SizedBox(height: 16),
               TextField(
                 controller: emailCtrl,
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
-                  labelText: AppText.get(language, 'email'),
+                  labelText: AppText.translate(language, 'email'),
                   border: const OutlineInputBorder(),
                 ),
               ),
@@ -60,7 +60,7 @@ class _RecoverScreenState extends State<RecoverScreen> {
               FilledButton.icon(
                 onPressed: isSending ? null : _sendResetLink,
                 icon: const Icon(Icons.lock_reset),
-                label: Text(AppText.get(language, 'reset_password')),
+                label: Text(AppText.translate(language, 'reset_password')),
               ),
             ],
           ),

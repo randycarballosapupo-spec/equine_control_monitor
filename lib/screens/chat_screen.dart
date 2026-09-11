@@ -30,6 +30,7 @@ class _ChatScreenState extends State<ChatScreen> {
   bool canModerate = false;
   String? currentEmail;
   String? privateRecipientEmail;
+  ChatMessage? replyToMessage;
   List<AppUser> availableUsers = [];
   StreamSubscription<List<Map<String, dynamic>>>? _chatSubscription;
 
@@ -86,14 +87,16 @@ class _ChatScreenState extends State<ChatScreen> {
         attachmentUrl: attachment,
         attachmentType: attachmentType,
         recipientEmail: privateRecipientEmail,
+        replyTo: replyToMessage,
       );
       messageController.clear();
+      replyToMessage = null;
       if (mounted) setState(() {});
     } catch (error) {
       if (!mounted) return;
       final language = widget.languageController.language;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('${AppText.get(language, 'send_message_error')} $error')),
+        SnackBar(content: Text('${AppText.translate(language, 'send_message_error')} $error')),
       );
     }
   }
@@ -106,7 +109,7 @@ class _ChatScreenState extends State<ChatScreen> {
           shrinkWrap: true,
           children: [
             ListTile(
-              title: Text(AppText.get(language, 'chat_community')),
+              title: Text(AppText.translate(language, 'chat_community')),
               leading: const Icon(Icons.groups),
               onTap: () => Navigator.pop(sheetContext),
             ),
@@ -131,7 +134,25 @@ class _ChatScreenState extends State<ChatScreen> {
     if (!isOwn && !canModerate) return;
     await ChatService.deleteMessage(message.id);
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppText.get(language, 'message_deleted'))));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppText.translate(language, 'message_deleted'))));
+  }
+
+  void _replyTo(ChatMessage message) {
+    setState(() {
+      replyToMessage = message;
+      privateRecipientEmail = message.senderEmail.toLowerCase() == currentEmail?.toLowerCase() ? privateRecipientEmail : message.senderEmail;
+    });
+  }
+
+  Future<void> _forward(ChatMessage message, AppLanguage language) async {
+    await _choosePrivateRecipient(language);
+    if (privateRecipientEmail == null) return;
+    await ChatService.sendMessage(
+      text: '${AppText.translate(language, 'forwarded')}: ${message.text}',
+      attachmentUrl: message.attachmentUrl,
+      attachmentType: message.attachmentType,
+      recipientEmail: privateRecipientEmail,
+    );
   }
 
   Future<void> _pickAttachment() async {
@@ -179,21 +200,21 @@ class _ChatScreenState extends State<ChatScreen> {
         final language = widget.languageController.language;
         if (!allowed) {
           return Scaffold(
-            appBar: AppBar(title: Text(AppText.get(language, 'chat'))),
-            body: Center(child: Text(AppText.get(language, 'chat_access_required'))),
+            appBar: AppBar(title: Text(AppText.translate(language, 'chat'))),
+            body: Center(child: Text(AppText.translate(language, 'chat_access_required'))),
           );
         }
         return Scaffold(
           appBar: AppBar(
             title: Text(
               privateRecipientEmail == null
-                  ? AppText.get(language, 'chat_community')
-                  : '${AppText.get(language, 'private_message')} ${privateRecipientEmail!}',
+                  ? AppText.translate(language, 'chat_community')
+                  : '${AppText.translate(language, 'private_message')} ${privateRecipientEmail!}',
               overflow: TextOverflow.ellipsis,
             ),
             actions: [
               IconButton(
-                tooltip: AppText.get(language, 'private_message'),
+                tooltip: AppText.translate(language, 'private_message'),
                 onPressed: () => _choosePrivateRecipient(language),
                 icon: const Icon(Icons.person_search),
               ),
@@ -209,7 +230,16 @@ class _ChatScreenState extends State<ChatScreen> {
                     final message = messages[index];
                     final attachment = message.attachmentUrl ?? '';
                     final own = message.senderEmail.toLowerCase() == currentEmail?.toLowerCase();
-                    return Align(
+                    return GestureDetector(
+                      onLongPress: () => showModalBottomSheet<void>(
+                        context: context,
+                        builder: (sheetContext) => SafeArea(child: Wrap(children: [
+                          ListTile(leading: const Icon(Icons.reply), title: Text(AppText.translate(language, 'reply')), onTap: () { Navigator.pop(sheetContext); _replyTo(message); }),
+                          ListTile(leading: const Icon(Icons.forward), title: Text(AppText.translate(language, 'forward')), onTap: () { Navigator.pop(sheetContext); _forward(message, language); }),
+                          if (own || canModerate) ListTile(leading: const Icon(Icons.delete_outline), title: Text(AppText.translate(language, 'delete')), onTap: () { Navigator.pop(sheetContext); _deleteMessage(message, language); }),
+                        ])),
+                      ),
+                      child: Align(
                       alignment: own ? Alignment.centerRight : Alignment.centerLeft,
                       child: Container(
                         constraints: const BoxConstraints(maxWidth: 330),
@@ -231,15 +261,21 @@ class _ChatScreenState extends State<ChatScreen> {
                           PopupMenuButton<String>(
                             padding: EdgeInsets.zero,
                             onSelected: (value) { if (value == 'delete') _deleteMessage(message, language); },
-                            itemBuilder: (context) => [PopupMenuItem(value: 'delete', child: Text(AppText.get(language, 'delete')))],
+                            itemBuilder: (context) => [PopupMenuItem(value: 'delete', child: Text(AppText.translate(language, 'delete')))],
                           ),
                           ]),
+                          if (message.replyToId != null) Container(
+                            margin: const EdgeInsets.only(bottom: 6),
+                            padding: const EdgeInsets.all(6),
+                            decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.08), borderRadius: BorderRadius.circular(6)),
+                            child: Text('${message.replyToSenderName ?? ''}: ${message.replyToText ?? ''}', maxLines: 2, overflow: TextOverflow.ellipsis),
+                          ),
                           if (message.text.isNotEmpty) Text(message.text),
-                          if (attachment.isNotEmpty && message.attachmentType == 'voice') OutlinedButton.icon(onPressed: () => _playVoice(attachment), icon: const Icon(Icons.play_arrow), label: Text(AppText.get(language, 'play_voice_message'))),
-                          if (attachment.isNotEmpty && message.attachmentType != 'voice') Text('${AppText.get(language, message.attachmentType == 'video' ? 'video_label' : 'photo_label')}: $attachment', style: const TextStyle(fontStyle: FontStyle.italic)),
+                          if (attachment.isNotEmpty && message.attachmentType == 'voice') OutlinedButton.icon(onPressed: () => _playVoice(attachment), icon: const Icon(Icons.play_arrow), label: Text(AppText.translate(language, 'play_voice_message'))),
+                          if (attachment.isNotEmpty && message.attachmentType != 'voice') Text('${AppText.translate(language, message.attachmentType == 'video' ? 'video_label' : 'photo_label')}: $attachment', style: const TextStyle(fontStyle: FontStyle.italic)),
                         ]),
                       ),
-                    );
+                    ));
                     /* return Card(
                       child: ListTile(
                         leading: const CircleAvatar(child: Icon(Icons.person)),
@@ -257,7 +293,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                   if (value == 'delete') _deleteMessage(message, language);
                                 },
                                 itemBuilder: (context) => [
-                                  PopupMenuItem(value: 'delete', child: Text(AppText.get(language, 'delete'))),
+                                  PopupMenuItem(value: 'delete', child: Text(AppText.translate(language, 'delete'))),
                                 ],
                               )
                             : null,
@@ -270,11 +306,11 @@ class _ChatScreenState extends State<ChatScreen> {
                                 OutlinedButton.icon(
                                   onPressed: () => _playVoice(attachment),
                                   icon: const Icon(Icons.play_arrow),
-                                  label: Text(AppText.get(language, 'play_voice_message')),
+                                  label: Text(AppText.translate(language, 'play_voice_message')),
                                 )
                               else
                                 Text(
-                                  '${AppText.get(language, message.attachmentType == 'video' ? 'video_label' : 'photo_label')}: $attachment',
+                                  '${AppText.translate(language, message.attachmentType == 'video' ? 'video_label' : 'photo_label')}: $attachment',
                                   style: const TextStyle(fontStyle: FontStyle.italic),
                                 ),
                           ],
@@ -285,15 +321,21 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
               ),
               SafeArea(
-                child: Row(
-                  children: [
+                child: Column(mainAxisSize: MainAxisSize.min, children: [
+                  if (replyToMessage != null) ListTile(
+                    dense: true,
+                    leading: const Icon(Icons.reply),
+                    title: Text('${replyToMessage!.senderName}: ${replyToMessage!.text}', maxLines: 1, overflow: TextOverflow.ellipsis),
+                    trailing: IconButton(onPressed: () => setState(() => replyToMessage = null), icon: const Icon(Icons.close)),
+                  ),
+                  Row(children: [
                     IconButton(
-                      tooltip: AppText.get(language, 'photo_or_video'),
+                      tooltip: AppText.translate(language, 'photo_or_video'),
                       onPressed: _pickAttachment,
                       icon: const Icon(Icons.attach_file),
                     ),
                     IconButton(
-                      tooltip: AppText.get(language, isRecording ? 'stop_recording' : 'record_voice'),
+                      tooltip: AppText.translate(language, isRecording ? 'stop_recording' : 'record_voice'),
                       onPressed: _toggleRecording,
                       color: isRecording ? Colors.red : null,
                       icon: Icon(isRecording ? Icons.stop : Icons.mic),
@@ -301,16 +343,16 @@ class _ChatScreenState extends State<ChatScreen> {
                     Expanded(
                       child: TextField(
                         controller: messageController,
-                        decoration: InputDecoration(hintText: AppText.get(language, 'write_message_hint')),
+                        decoration: InputDecoration(hintText: AppText.translate(language, 'write_message_hint')),
                       ),
                     ),
                     IconButton(
-                      tooltip: AppText.get(language, 'send'),
+                      tooltip: AppText.translate(language, 'send'),
                       onPressed: _send,
                       icon: const Icon(Icons.send),
                     ),
-                  ],
-                ),
+                  ]),
+                ]),
               ),
             ],
           ),

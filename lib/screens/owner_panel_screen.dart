@@ -47,11 +47,11 @@ class _OwnerPanelScreenState extends State<OwnerPanelScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: Text(AppText.get(language, 'delete_account')),
-        content: Text('${AppText.get(language, 'delete_account_confirm_prefix')} ${user.name}${AppText.get(language, 'delete_account_confirm_suffix')}'),
+        title: Text(AppText.translate(language, 'delete_account')),
+        content: Text('${AppText.translate(language, 'delete_account_confirm_prefix')} ${user.name}${AppText.translate(language, 'delete_account_confirm_suffix')}'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: Text(AppText.get(language, 'cancel'))),
-          FilledButton(onPressed: () => Navigator.pop(dialogContext, true), child: Text(AppText.get(language, 'delete_account'))),
+          TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: Text(AppText.translate(language, 'cancel'))),
+          FilledButton(onPressed: () => Navigator.pop(dialogContext, true), child: Text(AppText.translate(language, 'delete_account'))),
         ],
       ),
     );
@@ -79,7 +79,7 @@ class _OwnerPanelScreenState extends State<OwnerPanelScreen> {
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.black87,
-            title: Text(AppText.get(language, 'owner_panel_title')),
+            title: Text(AppText.translate(language, 'owner_panel_title')),
             actions: [
               IconButton(
                 tooltip: 'Mensajes al asistente',
@@ -114,7 +114,7 @@ class _OwnerPanelScreenState extends State<OwnerPanelScreen> {
                                     child: Icon(user.isOwner ? Icons.workspace_premium : Icons.person),
                                   ),
                                   title: Text(user.name),
-                                  subtitle: Text('${user.email}\n${AppText.get(language, 'status_label')}: ${user.status} · ${AppText.get(language, 'roles_label')}: ${user.roles.join(', ')}'),
+                                  subtitle: Text('${user.email}\n${AppText.translate(language, 'status_label')}: ${user.status} · ${AppText.translate(language, 'roles_label')}: ${user.roles.join(', ')}'),
                                 ),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -123,7 +123,7 @@ class _OwnerPanelScreenState extends State<OwnerPanelScreen> {
                                       onPressed: () => _toggleApproval(user),
                                       icon: Icon(user.isApproved ? Icons.block : Icons.check),
                                       label: Text(
-                                        AppText.get(language, user.isApproved ? 'reject' : 'approve'),
+                                        AppText.translate(language, user.isApproved ? 'reject' : 'approve'),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                       ),
@@ -133,7 +133,7 @@ class _OwnerPanelScreenState extends State<OwnerPanelScreen> {
                                         onPressed: () => _makePrimary(user),
                                         icon: const Icon(Icons.swap_horiz),
                                         label: Text(
-                                          AppText.get(language, 'transfer_primary_action'),
+                                          AppText.translate(language, 'transfer_primary_action'),
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                         ),
@@ -142,7 +142,7 @@ class _OwnerPanelScreenState extends State<OwnerPanelScreen> {
                                       onPressed: () => _deleteUser(user),
                                       icon: const Icon(Icons.delete_forever, color: Colors.red),
                                       label: Text(
-                                        AppText.get(language, 'delete_account'),
+                                        AppText.translate(language, 'delete_account'),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(color: Colors.red),

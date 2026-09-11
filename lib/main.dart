@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:app_links/app_links.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'service/app_language.dart';
@@ -9,11 +10,13 @@ import 'screens/dashboard_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
 import 'screens/recover_screen.dart';
+import 'screens/update_password_screen.dart';
 import 'screens/profile_form_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/monitoring_screen.dart';
 import 'screens/records_screen.dart';
 import 'screens/care_plan_screen.dart';
+import 'screens/shared_care_screen.dart';
 import 'screens/report_screen.dart';
 import 'screens/user_management_screen.dart';
 import 'screens/chat_screen.dart';
@@ -53,6 +56,7 @@ Future<void> _initializeServices() async {
     }
     final token = await FirebaseMessaging.instance.getToken();
     debugPrint('Firebase Messaging token: $token');
+    await NotificationService.registerCurrentDevice();
   } catch (error) {
     debugPrint('Notification initialization failed: $error');
   }
@@ -67,16 +71,33 @@ class EquineApp extends StatefulWidget {
 
 class _EquineAppState extends State<EquineApp> {
   final languageController = AppLanguageController();
+  final navigatorKey = GlobalKey<NavigatorState>();
+  StreamSubscription<Uri>? linkSubscription;
 
   @override
   void initState() {
     super.initState();
     languageController.load();
+    _listenForPasswordResetLinks();
+  }
+
+  Future<void> _listenForPasswordResetLinks() async {
+    final appLinks = AppLinks();
+    final initialLink = await appLinks.getInitialLink();
+    if (initialLink != null) _handleLink(initialLink);
+    linkSubscription = appLinks.uriLinkStream.listen(_handleLink);
+  }
+
+  void _handleLink(Uri link) {
+    if (link.scheme == 'equiharmony' && link.host == 'reset-password') {
+      navigatorKey.currentState?.pushNamed('/update-password');
+    }
   }
 
   @override
   void dispose() {
     languageController.dispose();
+    linkSubscription?.cancel();
     super.dispose();
   }
 
@@ -85,6 +106,7 @@ class _EquineAppState extends State<EquineApp> {
     return AnimatedBuilder(
       animation: languageController,
       builder: (context, _) => MaterialApp(
+        navigatorKey: navigatorKey,
         title: 'Equi_Harmony_Monitor',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
@@ -97,6 +119,7 @@ class _EquineAppState extends State<EquineApp> {
           '/': (context) => LoginScreen(languageController: languageController),
           '/register': (context) => RegisterScreen(languageController: languageController),
           '/recover': (context) => RecoverScreen(languageController: languageController),
+          '/update-password': (context) => UpdatePasswordScreen(languageController: languageController),
           '/dashboard': (context) => DashboardScreen(
                 languageController: languageController,
               ),
@@ -126,6 +149,7 @@ class _EquineAppState extends State<EquineApp> {
           '/care': (context) => CarePlanScreen(
                 languageController: languageController,
               ),
+          '/shared-care': (context) => SharedCareScreen(languageController: languageController),
           '/report': (context) => ReportScreen(
                 languageController: languageController,
               ),

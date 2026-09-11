@@ -59,7 +59,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     final roles = _pendingRoleSelections[user.email] ?? <String>{};
     if (roles.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppText.get(language, 'select_roles_required'))),
+        SnackBar(content: Text(AppText.translate(language, 'select_roles_required'))),
       );
       return;
     }
@@ -73,11 +73,11 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: Text(AppText.get(language, 'transfer_primary_title')),
-        content: Text('${AppText.get(language, 'transfer_primary_confirm_prefix')} ${user.name}${AppText.get(language, 'transfer_primary_confirm_suffix')}'),
+        title: Text(AppText.translate(language, 'transfer_primary_title')),
+        content: Text('${AppText.translate(language, 'transfer_primary_confirm_prefix')} ${user.name}${AppText.translate(language, 'transfer_primary_confirm_suffix')}'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: Text(AppText.get(language, 'cancel'))),
-          FilledButton(onPressed: () => Navigator.pop(dialogContext, true), child: Text(AppText.get(language, 'transfer_primary_action'))),
+          TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: Text(AppText.translate(language, 'cancel'))),
+          FilledButton(onPressed: () => Navigator.pop(dialogContext, true), child: Text(AppText.translate(language, 'transfer_primary_action'))),
         ],
       ),
     );
@@ -87,7 +87,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     await _loadUsers();
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(AppText.get(language, success ? 'transfer_primary_success' : 'transfer_primary_error'))),
+      SnackBar(content: Text(AppText.translate(language, success ? 'transfer_primary_success' : 'transfer_primary_error'))),
     );
   }
 
@@ -96,11 +96,11 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: Text(AppText.get(language, 'delete_account')),
-        content: Text('${AppText.get(language, 'delete_account_confirm_prefix')} ${user.name}${AppText.get(language, 'delete_account_confirm_suffix')}'),
+        title: Text(AppText.translate(language, 'delete_account')),
+        content: Text('${AppText.translate(language, 'delete_account_confirm_prefix')} ${user.name}${AppText.translate(language, 'delete_account_confirm_suffix')}'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: Text(AppText.get(language, 'cancel'))),
-          FilledButton(onPressed: () => Navigator.pop(dialogContext, true), child: Text(AppText.get(language, 'delete_account'))),
+          TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: Text(AppText.translate(language, 'cancel'))),
+          FilledButton(onPressed: () => Navigator.pop(dialogContext, true), child: Text(AppText.translate(language, 'delete_account'))),
         ],
       ),
     );
@@ -115,7 +115,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     await _loadUsers();
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(AppText.get(language, deleted ? 'account_deleted' : 'account_delete_error'))),
+      SnackBar(content: Text(AppText.translate(language, deleted ? 'account_deleted' : 'account_delete_error'))),
     );
   }
 
@@ -128,20 +128,20 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(AppText.get(language, 'add_administrator')),
+        title: Text(AppText.translate(language, 'add_administrator')),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextField(controller: name, decoration: InputDecoration(labelText: AppText.get(language, 'name'))),
-              TextField(controller: email, decoration: InputDecoration(labelText: AppText.get(language, 'email'))),
-              TextField(controller: password, obscureText: true, decoration: InputDecoration(labelText: '${AppText.get(language, 'password')} (${AppText.get(language, 'min_password_chars')})')),
-              TextField(controller: stable, decoration: InputDecoration(labelText: AppText.get(language, 'stable_label'))),
+              TextField(controller: name, decoration: InputDecoration(labelText: AppText.translate(language, 'name'))),
+              TextField(controller: email, decoration: InputDecoration(labelText: AppText.translate(language, 'email'))),
+              TextField(controller: password, obscureText: true, decoration: InputDecoration(labelText: '${AppText.translate(language, 'password')} (${AppText.translate(language, 'min_password_chars')})')),
+              TextField(controller: stable, decoration: InputDecoration(labelText: AppText.translate(language, 'stable_label'))),
             ],
           ),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: Text(AppText.get(language, 'cancel'))),
+          TextButton(onPressed: () => Navigator.pop(context, false), child: Text(AppText.translate(language, 'cancel'))),
           FilledButton(
             onPressed: () async {
               final added = name.text.trim().isNotEmpty &&
@@ -155,7 +155,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
               if (!context.mounted) return;
               Navigator.pop(context, added);
             },
-            child: Text(AppText.get(language, 'add')),
+            child: Text(AppText.translate(language, 'add')),
           ),
         ],
       ),
@@ -169,7 +169,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     if (!mounted) return;
     if (result != null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppText.get(language, result ? 'administrator_added' : 'administrator_add_error'))),
+        SnackBar(content: Text(AppText.translate(language, result ? 'administrator_added' : 'administrator_add_error'))),
       );
     }
   }
@@ -185,24 +185,24 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
-          title: Text(AppText.get(language, 'create_user')),
+          title: Text(AppText.translate(language, 'create_user')),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                TextField(controller: name, decoration: InputDecoration(labelText: AppText.get(language, 'name'))),
-                TextField(controller: email, decoration: InputDecoration(labelText: AppText.get(language, 'email'))),
-                TextField(controller: password, obscureText: true, decoration: InputDecoration(labelText: '${AppText.get(language, 'password')} (${AppText.get(language, 'min_password_chars')})')),
-                TextField(controller: stable, decoration: InputDecoration(labelText: AppText.get(language, 'stable_label'))),
+                TextField(controller: name, decoration: InputDecoration(labelText: AppText.translate(language, 'name'))),
+                TextField(controller: email, decoration: InputDecoration(labelText: AppText.translate(language, 'email'))),
+                TextField(controller: password, obscureText: true, decoration: InputDecoration(labelText: '${AppText.translate(language, 'password')} (${AppText.translate(language, 'min_password_chars')})')),
+                TextField(controller: stable, decoration: InputDecoration(labelText: AppText.translate(language, 'stable_label'))),
                 const SizedBox(height: 8),
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(AppText.get(language, 'select_roles'), style: const TextStyle(fontWeight: FontWeight.bold)),
+                  child: Text(AppText.translate(language, 'select_roles'), style: const TextStyle(fontWeight: FontWeight.bold)),
                 ),
                 ...{
-                  'admin': AppText.get(language, 'role_admin'),
-                  'owner': AppText.get(language, 'role_owner'),
-                  'veterinarian': AppText.get(language, 'role_veterinarian'),
+                  'admin': AppText.translate(language, 'role_admin'),
+                  'owner': AppText.translate(language, 'role_owner'),
+                  'veterinarian': AppText.translate(language, 'role_veterinarian'),
                 }.entries.map((entry) => CheckboxListTile(
                       dense: true,
                       contentPadding: EdgeInsets.zero,
@@ -220,7 +220,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
             ),
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(context, false), child: Text(AppText.get(language, 'cancel'))),
+            TextButton(onPressed: () => Navigator.pop(context, false), child: Text(AppText.translate(language, 'cancel'))),
             FilledButton(
               onPressed: () async {
                 final added = name.text.trim().isNotEmpty &&
@@ -236,7 +236,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                 if (!context.mounted) return;
                 Navigator.pop(context, added);
               },
-              child: Text(AppText.get(language, 'add')),
+              child: Text(AppText.translate(language, 'add')),
             ),
           ],
         ),
@@ -251,7 +251,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     if (!mounted) return;
     if (result != null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppText.get(language, result ? 'user_created' : 'user_create_error'))),
+        SnackBar(content: Text(AppText.translate(language, result ? 'user_created' : 'user_create_error'))),
       );
     }
   }
@@ -264,17 +264,17 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
         final language = widget.languageController.language;
         return Scaffold(
           appBar: AppBar(
-            title: Text(AppText.get(language, 'validate_users')),
+            title: Text(AppText.translate(language, 'validate_users')),
             actions: [
               if (currentIsOwner)
                 IconButton(
-                  tooltip: AppText.get(language, 'create_user'),
+                  tooltip: AppText.translate(language, 'create_user'),
                   onPressed: _createUser,
                   icon: const Icon(Icons.person_add_alt_1),
                 ),
-              if (currentIsPrimary || currentIsOwner)
+              if (currentIsOwner)
                 IconButton(
-                  tooltip: AppText.get(language, 'add_administrator'),
+                  tooltip: AppText.translate(language, 'add_administrator'),
                   onPressed: _addAdministrator,
                   icon: const Icon(Icons.admin_panel_settings),
                 ),
@@ -283,7 +283,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
           body: loading
               ? const Center(child: CircularProgressIndicator())
               : users.isEmpty
-                  ? Center(child: Text(AppText.get(language, 'no_users')))
+                  ? Center(child: Text(AppText.translate(language, 'no_users')))
                   : ListView.builder(
                       padding: const EdgeInsets.all(16),
                       itemCount: users.length,
@@ -300,13 +300,13 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                   contentPadding: EdgeInsets.zero,
                                   leading: const CircleAvatar(child: Icon(Icons.person)),
                                   title: Text(user.name),
-                                    subtitle: Text('${user.email}\n${AppText.get(language, 'status_label')}: ${user.status}'),
+                                    subtitle: Text('${user.email}\n${AppText.translate(language, 'status_label')}: ${user.status}'),
                                 ),
-                                Text('${AppText.get(language, 'roles_label')}: ${user.roles.join(', ')}'),
-                                if (user.stableName.isNotEmpty) Text('${AppText.get(language, 'stable_label')}: ${user.stableName}'),
+                                Text('${AppText.translate(language, 'roles_label')}: ${user.roles.join(', ')}'),
+                                if (user.stableName.isNotEmpty) Text('${AppText.translate(language, 'stable_label')}: ${user.stableName}'),
                                 SwitchListTile(
                                   contentPadding: EdgeInsets.zero,
-                                  title: Text(AppText.get(language, 'chat_room_access')),
+                                  title: Text(AppText.translate(language, 'chat_room_access')),
                                   value: chatMembers.contains(user.email),
                                   onChanged: user.isApproved
                                       ? (enabled) async {
@@ -317,11 +317,11 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                 ),
                                 const SizedBox(height: 8),
                                 if (isPending) ...[
-                                  Text(AppText.get(language, 'select_roles'), style: const TextStyle(fontWeight: FontWeight.bold)),
+                                  Text(AppText.translate(language, 'select_roles'), style: const TextStyle(fontWeight: FontWeight.bold)),
                                   ...{
-                                    'admin': AppText.get(language, 'role_admin'),
-                                    'owner': AppText.get(language, 'role_owner'),
-                                    'veterinarian': AppText.get(language, 'role_veterinarian'),
+                                    'admin': AppText.translate(language, 'role_admin'),
+                                    'owner': AppText.translate(language, 'role_owner'),
+                                    'veterinarian': AppText.translate(language, 'role_veterinarian'),
                                   }.entries.map((entry) {
                                     final selected = _pendingRoleSelections[user.email] ?? <String>{};
                                     return CheckboxListTile(
@@ -345,7 +345,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                         child: OutlinedButton.icon(
                                           onPressed: () => _update(user, 'rejected'),
                                           icon: const Icon(Icons.close),
-                                          label: Text(AppText.get(language, 'reject'), overflow: TextOverflow.ellipsis),
+                                          label: Text(AppText.translate(language, 'reject'), overflow: TextOverflow.ellipsis),
                                         ),
                                       ),
                                       const SizedBox(width: 8),
@@ -353,7 +353,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                         child: FilledButton.icon(
                                           onPressed: () => _approveWithRoles(user),
                                           icon: const Icon(Icons.check),
-                                          label: Text(AppText.get(language, 'approve'), overflow: TextOverflow.ellipsis),
+                                          label: Text(AppText.translate(language, 'approve'), overflow: TextOverflow.ellipsis),
                                         ),
                                       ),
                                     ],
@@ -366,7 +366,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                       onPressed: () => _transferPrimaryAdmin(user),
                                       icon: const Icon(Icons.swap_horiz),
                                       label: Text(
-                                        AppText.get(language, 'transfer_primary_action'),
+                                        AppText.translate(language, 'transfer_primary_action'),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                       ),
@@ -378,7 +378,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                     onPressed: () => _deleteUser(user),
                                     icon: const Icon(Icons.delete_outline, color: Colors.red),
                                     label: Text(
-                                      AppText.get(language, 'delete_account'),
+                                      AppText.translate(language, 'delete_account'),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(color: Colors.red),

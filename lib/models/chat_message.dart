@@ -9,6 +9,9 @@ class ChatMessage {
     required this.text,
     this.attachmentUrl,
     this.attachmentType,
+    this.replyToId,
+    this.replyToText,
+    this.replyToSenderName,
     required this.createdAt,
   });
 
@@ -21,6 +24,9 @@ class ChatMessage {
   final String text;
   final String? attachmentUrl;
   final String? attachmentType;
+  final String? replyToId;
+  final String? replyToText;
+  final String? replyToSenderName;
   final String createdAt;
 
   factory ChatMessage.fromMap(Map<String, dynamic> map) {
@@ -34,6 +40,9 @@ class ChatMessage {
       text: '${map['text'] ?? ''}',
       attachmentUrl: map['attachment_url'] == null ? null : '${map['attachment_url']}',
       attachmentType: map['attachment_type'] == null ? null : '${map['attachment_type']}',
+      replyToId: map['reply_to_id'] == null ? null : '${map['reply_to_id']}',
+      replyToText: map['reply_to_text'] == null ? null : '${map['reply_to_text']}',
+      replyToSenderName: map['reply_to_sender_name'] == null ? null : '${map['reply_to_sender_name']}',
       createdAt: '${map['created_at'] ?? DateTime.now().toUtc().toIso8601String()}',
     );
   }
@@ -48,6 +57,9 @@ class ChatMessage {
         'text': text,
         'attachment_url': attachmentUrl,
         'attachment_type': attachmentType,
+        'reply_to_id': replyToId,
+        'reply_to_text': replyToText,
+        'reply_to_sender_name': replyToSenderName,
         'created_at': createdAt,
       };
 
@@ -60,6 +72,9 @@ class ChatMessage {
         'text': text,
         'attachment_url': attachmentUrl,
         'attachment_type': attachmentType,
+        'reply_to_id': replyToId,
+        'reply_to_text': replyToText,
+        'reply_to_sender_name': replyToSenderName,
         'created_at': createdAt,
       };
 }

@@ -25,14 +25,14 @@ class SettingsScreen extends StatelessWidget {
       builder: (context, _) {
         final language = languageController.language;
         return Scaffold(
-          appBar: AppBar(title: Text(AppText.get(language, 'settings'))),
+          appBar: AppBar(title: Text(AppText.translate(language, 'settings'))),
           body: ListView(
             padding: const EdgeInsets.all(20),
             children: [
               const Icon(Icons.translate, size: 56, color: Colors.teal),
               const SizedBox(height: 16),
               Text(
-                AppText.get(language, 'language'),
+                AppText.translate(language, 'language'),
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 12),
@@ -58,7 +58,7 @@ class SettingsScreen extends StatelessWidget {
                     builder: (context, setSwitchState) => SwitchListTile.adaptive(
                     contentPadding: EdgeInsets.zero,
                     secondary: const Icon(Icons.notifications_active_outlined),
-                    title: Text(AppText.get(language, 'notifications')),
+                    title: Text(AppText.translate(language, 'notifications')),
                     value: enabled,
                     onChanged: (value) async {
                       enabled = value;
@@ -75,22 +75,22 @@ class SettingsScreen extends StatelessWidget {
               const SizedBox(height: 12),
               OutlinedButton.icon(
                 icon: const Icon(Icons.support_agent),
-                label: const Text('Atención al usuario'),
+                label: Text(AppText.translate(language, 'user_support')),
                 onPressed: () => Navigator.pushNamed(context, '/assistant-contact'),
               ),
               const SizedBox(height: 12),
               OutlinedButton.icon(
                 icon: const Icon(Icons.delete_forever, color: Colors.red),
-                label: Text(AppText.get(language, 'delete_local_account')),
+                label: Text(AppText.translate(language, 'delete_local_account')),
                 onPressed: () async {
                   final confirmed = await showDialog<bool>(
                     context: context,
                     builder: (dialogContext) => AlertDialog(
-                      title: Text(AppText.get(language, 'delete_account')),
-                      content: Text(AppText.get(language, 'delete_account_warning')),
+                      title: Text(AppText.translate(language, 'delete_account')),
+                      content: Text(AppText.translate(language, 'delete_account_warning')),
                       actions: [
-                        TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: Text(AppText.get(language, 'cancel'))),
-                        FilledButton(onPressed: () => Navigator.pop(dialogContext, true), child: Text(AppText.get(language, 'delete'))),
+                        TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: Text(AppText.translate(language, 'cancel'))),
+                        FilledButton(onPressed: () => Navigator.pop(dialogContext, true), child: Text(AppText.translate(language, 'delete'))),
                       ],
                     ),
                   );
@@ -101,7 +101,7 @@ class SettingsScreen extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 8),
-              Text(AppText.get(language, 'password_privacy_note'), style: const TextStyle(fontSize: 12)),
+              Text(AppText.translate(language, 'password_privacy_note'), style: const TextStyle(fontSize: 12)),
             ],
           ),
         );

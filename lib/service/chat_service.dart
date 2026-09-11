@@ -54,6 +54,7 @@ class ChatService {
     String? attachmentUrl,
     String? attachmentType,
     String? recipientEmail,
+    ChatMessage? replyTo,
   }) async {
     final supabaseUser = SupabaseConfig.client.auth.currentUser;
     final localUser = await AuthService.currentUser();
@@ -72,6 +73,9 @@ class ChatService {
       text: text.trim(),
       attachmentUrl: attachmentUrl,
       attachmentType: attachmentType,
+      replyToId: replyTo?.id,
+      replyToText: replyTo?.text,
+      replyToSenderName: replyTo?.senderName,
       createdAt: DateTime.now().toUtc().toIso8601String(),
     );
 

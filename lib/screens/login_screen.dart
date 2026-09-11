@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../service/auth_service.dart';
 import '../service/app_language.dart';
 import '../service/app_version.dart';
+import '../service/notification_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key, required this.languageController});
@@ -48,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        AppText.get(language, 'welcome_message'),
+                        AppText.translate(language, 'welcome_message'),
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           color: Color(0xFF2E4D2E),
@@ -61,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         controller: emailCtrl,
                         style: const TextStyle(color: Color(0xFF2E4D2E)),
                         decoration: InputDecoration(
-                          labelText: AppText.get(language, 'email'),
+                          labelText: AppText.translate(language, 'email'),
                           labelStyle: const TextStyle(color: Color(0xFF2E4D2E)),
                           filled: true,
                           fillColor: Colors.white,
@@ -76,12 +77,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         obscureText: hidePassword,
                         style: const TextStyle(color: Color(0xFF2E4D2E)),
                         decoration: InputDecoration(
-                          labelText: AppText.get(language, 'password'),
+                          labelText: AppText.translate(language, 'password'),
                           labelStyle: const TextStyle(color: Color(0xFF2E4D2E)),
                           filled: true,
                           fillColor: Colors.white,
                           suffixIcon: IconButton(
-                            tooltip: AppText.get(language, hidePassword ? 'show_password' : 'hide_password'),
+                            tooltip: AppText.translate(language, hidePassword ? 'show_password' : 'hide_password'),
                             onPressed: () => setState(() => hidePassword = !hidePassword),
                             icon: Icon(
                               hidePassword ? Icons.visibility : Icons.visibility_off,
@@ -113,6 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           if (ok) {
                             await AuthService.rememberEmail(emailCtrl.text);
                             await widget.languageController.loadForCurrentUser();
+                            await NotificationService.registerCurrentDevice();
                             if (!context.mounted) return;
                             Navigator.pushReplacementNamed(context, '/dashboard');
                           } else {
@@ -122,12 +124,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             );
                             if (!context.mounted) return;
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(AppText.get(language, reasonKey))),
+                              SnackBar(content: Text(AppText.translate(language, reasonKey))),
                             );
                           }
                         },
                         child: Text(
-                          AppText.get(language, 'login').toUpperCase(),
+                          AppText.translate(language, 'login').toUpperCase(),
                           style: const TextStyle(fontSize: 18),
                         ),
                       ),
@@ -137,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: FilledButton.icon(
                           onPressed: () => Navigator.pushNamed(context, '/assistant-contact'),
                           icon: const Icon(Icons.support_agent),
-                          label: const Text('Atención al usuario'),
+                          label: Text(AppText.translate(language, 'user_support')),
                           style: FilledButton.styleFrom(
                             backgroundColor: const Color(0xFFB8860B),
                             foregroundColor: Colors.white,
@@ -152,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             onPressed: () => Navigator.pushNamed(context, '/admin-login'),
                             icon: const Icon(Icons.admin_panel_settings, color: Color(0xFF2E4D2E)),
                             label: Text(
-                              AppText.get(language, 'admin_access').toUpperCase(),
+                              AppText.translate(language, 'admin_access').toUpperCase(),
                               style: const TextStyle(color: Color(0xFF2E4D2E)),
                             ),
                           ),
@@ -161,7 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               Navigator.pushNamed(context, '/register');
                             },
                             child: Text(
-                              AppText.get(language, 'create_account').toUpperCase(),
+                              AppText.translate(language, 'create_account').toUpperCase(),
                               style: const TextStyle(color: Color(0xFF2E4D2E)),
                             ),
                           ),
@@ -171,7 +173,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               Navigator.pushNamed(context, '/recover');
                             },
                             child: Text(
-                              AppText.get(language, 'forgot_password').toUpperCase(),
+                              AppText.translate(language, 'forgot_password').toUpperCase(),
                               style: const TextStyle(color: Color(0xFF2E4D2E)),
                             ),
                           ),

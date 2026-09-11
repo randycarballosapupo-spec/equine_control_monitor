@@ -85,15 +85,16 @@ class _AssistantContactScreenState extends State<AssistantContactScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final language = widget.languageController.language;
     return Scaffold(
-      appBar: AppBar(title: const Text('Atención al usuario')),
+      appBar: AppBar(title: Text(AppText.translate(language, 'user_support'))),
       body: loading
           ? const Center(child: CircularProgressIndicator())
           : Column(
               children: [
                 Expanded(
                   child: messages.isEmpty
-                      ? const Center(child: Text('Escribe a Atención al usuario.'))
+                      ? Center(child: Text(AppText.translate(language, 'write_to_support')))
                       : ListView.builder(
                           padding: const EdgeInsets.all(12),
                           itemCount: messages.length,
@@ -117,9 +118,9 @@ class _AssistantContactScreenState extends State<AssistantContactScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Row(
                       children: [
-                        Expanded(child: TextField(controller: nameController, decoration: const InputDecoration(labelText: 'Nombre'))),
+                        Expanded(child: TextField(controller: nameController, decoration: InputDecoration(labelText: AppText.translate(language, 'name')))),
                         const SizedBox(width: 8),
-                        Expanded(child: TextField(controller: emailController, decoration: const InputDecoration(labelText: 'Correo'))),
+                        Expanded(child: TextField(controller: emailController, decoration: InputDecoration(labelText: AppText.translate(language, 'email')))),
                       ],
                     ),
                   ),
@@ -128,7 +129,7 @@ class _AssistantContactScreenState extends State<AssistantContactScreen> {
                     padding: const EdgeInsets.all(8),
                     child: Row(
                       children: [
-                        Expanded(child: TextField(controller: messageController, decoration: const InputDecoration(hintText: 'Escribe tu mensaje'))),
+                        Expanded(child: TextField(controller: messageController, decoration: InputDecoration(hintText: AppText.translate(language, 'write_message')))),
                         IconButton(onPressed: _send, icon: const Icon(Icons.send)),
                       ],
                     ),

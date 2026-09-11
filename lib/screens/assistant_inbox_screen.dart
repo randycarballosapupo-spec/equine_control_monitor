@@ -61,13 +61,14 @@ class _AssistantInboxScreenState extends State<AssistantInboxScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final language = widget.languageController.language;
     final contacts = messages.map((message) => message.senderEmail).where((email) => email != 'creator').toSet().toList();
     final selectedMessages = messages.where((message) =>
         message.senderEmail == selectedEmail || message.recipientEmail == selectedEmail).toList();
     return Scaffold(
-      appBar: AppBar(title: const Text('Mensajes al asistente')),
+        appBar: AppBar(title: Text(AppText.translate(language, 'assistant_messages'))),
       body: contacts.isEmpty
-          ? const Center(child: Text('Aún no hay mensajes de usuarios.'))
+          ? Center(child: Text(AppText.translate(language, 'no_user_messages')))
           : Row(
         children: [
           SizedBox(
@@ -86,7 +87,7 @@ class _AssistantInboxScreenState extends State<AssistantInboxScreen> {
               children: [
                 Expanded(
                   child: selectedEmail == null
-                      ? const Center(child: Text('Selecciona un contacto de la izquierda.'))
+                      ? Center(child: Text(AppText.translate(language, 'select_contact')))
                       : ListView.builder(
                     padding: const EdgeInsets.all(12),
                     itemCount: selectedMessages.length,
@@ -100,7 +101,7 @@ class _AssistantInboxScreenState extends State<AssistantInboxScreen> {
                   SafeArea(
                     child: Row(
                       children: [
-                        Expanded(child: TextField(controller: replyController, decoration: const InputDecoration(hintText: 'Responder'))),
+                        Expanded(child: TextField(controller: replyController, decoration: InputDecoration(hintText: AppText.translate(language, 'reply')))),
                         IconButton(onPressed: _reply, icon: const Icon(Icons.send)),
                       ],
                     ),
