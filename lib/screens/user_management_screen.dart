@@ -20,6 +20,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
   bool currentIsPrimary = false;
   bool currentIsOwner = false;
   bool loading = true;
+  final Map<String, Set<String>> _pendingRoleSelections = {};
 
   @override
   void initState() {
@@ -50,6 +51,20 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
 
   Future<void> _update(AppUser user, String status) async {
     await AuthService.updateUserStatus(user.email, status);
+    await _loadUsers();
+  }
+
+  Future<void> _approveWithRoles(AppUser user) async {
+    final language = widget.languageController.language;
+    final roles = _pendingRoleSelections[user.email] ?? <String>{};
+    if (roles.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(AppText.get(language, 'select_roles_required'))),
+      );
+      return;
+    }
+    await AuthService.approveUserWithRoles(user.email, roles.toList());
+    _pendingRoleSelections.remove(user.email);
     await _loadUsers();
   }
 
@@ -213,7 +228,29 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                       : null,
                                 ),
                                 const SizedBox(height: 8),
-                                if (isPending)
+                                if (isPending) ...[
+                                  Text(AppText.get(language, 'select_roles'), style: const TextStyle(fontWeight: FontWeight.bold)),
+                                  ...{
+                                    'admin': AppText.get(language, 'role_admin'),
+                                    'owner': AppText.get(language, 'role_owner'),
+                                    'veterinarian': AppText.get(language, 'role_veterinarian'),
+                                  }.entries.map((entry) {
+                                    final selected = _pendingRoleSelections[user.email] ?? <String>{};
+                                    return CheckboxListTile(
+                                      dense: true,
+                                      contentPadding: EdgeInsets.zero,
+                                      value: selected.contains(entry.key),
+                                      title: Text(entry.value),
+                                      onChanged: (checked) => setState(() {
+                                        final set = _pendingRoleSelections.putIfAbsent(user.email, () => <String>{});
+                                        if (checked == true) {
+                                          set.add(entry.key);
+                                        } else {
+                                          set.remove(entry.key);
+                                        }
+                                      }),
+                                    );
+                                  }),
                                   Row(
                                     children: [
                                       Expanded(
@@ -226,13 +263,14 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                       const SizedBox(width: 8),
                                       Expanded(
                                         child: FilledButton.icon(
-                                          onPressed: () => _update(user, 'approved'),
+                                          onPressed: () => _approveWithRoles(user),
                                           icon: const Icon(Icons.check),
                                           label: Text(AppText.get(language, 'approve'), overflow: TextOverflow.ellipsis),
                                         ),
                                       ),
                                     ],
                                   ),
+                                ],
                                 if ((currentIsPrimary || currentIsOwner) && user.isAdmin && user.isApproved && user.email != currentEmail)
                                   SizedBox(
                                     width: double.infinity,

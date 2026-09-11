@@ -138,6 +138,14 @@ class AuthService {
     await _client.from(_table).update({'status': status}).eq('email', email.trim().toLowerCase());
   }
 
+  /// Asigna los roles definitivos y aprueba en un solo paso (usado por el asistente/admin).
+  static Future<void> approveUserWithRoles(String email, List<String> roles) async {
+    await _client
+        .from(_table)
+        .update({'roles': roles, 'status': 'approved'})
+        .eq('email', email.trim().toLowerCase());
+  }
+
   static Future<bool> chatAccess(String email) async {
     final row = await _client.from(_table).select('chat_enabled').eq('email', email.trim().toLowerCase()).maybeSingle();
     return row?['chat_enabled'] == true;
