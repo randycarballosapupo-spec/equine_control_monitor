@@ -455,7 +455,13 @@ class _NotificationBellState extends State<NotificationBell> {
     final isOwner = await AuthService.isCurrentOwner();
     _postsSubscription = SupabaseConfig.client.from('posts').stream(primaryKey: ['id']).listen((rows) {
       final ids = rows.map((row) => '${row['id']}').toSet();
-      if (postsReady) unread += ids.difference(knownPostIds).length;
+      if (postsReady) {
+        final newIds = ids.difference(knownPostIds);
+        unread += newIds.length;
+        if (newIds.isNotEmpty) {
+          NotificationService.show('Muro', 'Hay una nueva publicación en el muro.');
+        }
+      }
       knownPostIds = ids;
       postsReady = true;
       if (mounted) setState(() {});
@@ -465,7 +471,13 @@ class _NotificationBellState extends State<NotificationBell> {
           .where((row) => '${row['sender_email'] ?? ''}' != (user.email ?? ''))
           .map((row) => '${row['id']}')
           .toSet();
-      if (messagesReady) unread += ids.difference(knownMessageIds).length;
+      if (messagesReady) {
+        final newIds = ids.difference(knownMessageIds);
+        unread += newIds.length;
+        if (newIds.isNotEmpty) {
+          NotificationService.show('Chat', 'Tienes un nuevo mensaje en el chat.');
+        }
+      }
       knownMessageIds = ids;
       messagesReady = true;
       if (mounted) setState(() {});
@@ -476,7 +488,13 @@ class _NotificationBellState extends State<NotificationBell> {
             .where((row) => '${row['sender_email'] ?? ''}' != (user.email ?? ''))
             .map((row) => '${row['id']}')
             .toSet();
-        if (messagesReady) unread += ids.difference(knownAssistantIds).length;
+        if (messagesReady) {
+          final newIds = ids.difference(knownAssistantIds);
+          unread += newIds.length;
+          if (newIds.isNotEmpty) {
+            NotificationService.show('Asistente', 'Un usuario te escribió al asistente.');
+          }
+        }
         knownAssistantIds = ids;
         if (mounted) setState(() {});
       });
