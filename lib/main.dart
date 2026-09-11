@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'service/app_language.dart';
@@ -32,16 +33,29 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  await NotificationService.initialize();
-  if (await NotificationService.isEnabled()) {
-    await FirebaseMessaging.instance.requestPermission(alert: true, badge: true, sound: true);
-  }
-  final token = await FirebaseMessaging.instance.getToken();
-  debugPrint('Firebase Messaging token: $token');
-  await SupabaseConfig.initialize();
   runApp(const EquineApp());
+  unawaited(_initializeServices());
+}
+
+Future<void> _initializeServices() async {
+  try {
+    await SupabaseConfig.initialize();
+  } catch (error) {
+    debugPrint('Supabase initialization failed: $error');
+  }
+
+  try {
+    await Firebase.initializeApp();
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    await NotificationService.initialize();
+    if (await NotificationService.isEnabled()) {
+      await FirebaseMessaging.instance.requestPermission(alert: true, badge: true, sound: true);
+    }
+    final token = await FirebaseMessaging.instance.getToken();
+    debugPrint('Firebase Messaging token: $token');
+  } catch (error) {
+    debugPrint('Notification initialization failed: $error');
+  }
 }
 
 class EquineApp extends StatefulWidget {
