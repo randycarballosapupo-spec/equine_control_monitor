@@ -30,26 +30,31 @@ class _AssistantContactScreenState extends State<AssistantContactScreen> {
   }
 
   Future<void> _load() async {
-    final user = await AuthService.currentUser();
-    if (user?.isOwner == true) {
-      if (mounted) Navigator.pushReplacementNamed(context, '/assistant-inbox');
-      return;
-    }
-    senderName = user?.name ?? '';
-    senderEmail = user?.email ?? '';
-    if (senderEmail.isNotEmpty) {
-      messages = await AssistantService.messages(email: senderEmail);
-      subscription = AssistantService.subscribe().listen((rows) async {
-        if (!mounted) return;
-        setState(() {
-          messages = rows
-              .map((row) => AssistantMessage.fromMap(row))
-              .where((message) => message.senderEmail == senderEmail || message.recipientEmail == senderEmail)
-              .toList();
+    try {
+      final user = await AuthService.currentUser();
+      if (user?.isOwner == true) {
+        if (mounted) Navigator.pushReplacementNamed(context, '/assistant-inbox');
+        return;
+      }
+      senderName = user?.name ?? '';
+      senderEmail = user?.email ?? '';
+      if (senderEmail.isNotEmpty) {
+        messages = await AssistantService.messages(email: senderEmail);
+        subscription = AssistantService.subscribe().listen((rows) async {
+          if (!mounted) return;
+          setState(() {
+            messages = rows
+                .map((row) => AssistantMessage.fromMap(row))
+                .where((message) => message.senderEmail == senderEmail || message.recipientEmail == senderEmail)
+                .toList();
+          });
         });
-      });
+      }
+    } catch (_) {
+      // Si falla la carga (ej. red lenta), se muestra la pantalla vacía en vez de quedar cargando para siempre.
+    } finally {
+      if (mounted) setState(() => loading = false);
     }
-    if (mounted) setState(() => loading = false);
   }
 
   Future<void> _send() async {

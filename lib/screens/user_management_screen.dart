@@ -174,6 +174,88 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     }
   }
 
+  Future<void> _createUser() async {
+    final language = widget.languageController.language;
+    final name = TextEditingController();
+    final email = TextEditingController();
+    final password = TextEditingController();
+    final stable = TextEditingController();
+    final roles = <String>{};
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: Text(AppText.get(language, 'create_user')),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(controller: name, decoration: InputDecoration(labelText: AppText.get(language, 'name'))),
+                TextField(controller: email, decoration: InputDecoration(labelText: AppText.get(language, 'email'))),
+                TextField(controller: password, obscureText: true, decoration: InputDecoration(labelText: '${AppText.get(language, 'password')} (${AppText.get(language, 'min_password_chars')})')),
+                TextField(controller: stable, decoration: InputDecoration(labelText: AppText.get(language, 'stable_label'))),
+                const SizedBox(height: 8),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(AppText.get(language, 'select_roles'), style: const TextStyle(fontWeight: FontWeight.bold)),
+                ),
+                ...{
+                  'admin': AppText.get(language, 'role_admin'),
+                  'owner': AppText.get(language, 'role_owner'),
+                  'veterinarian': AppText.get(language, 'role_veterinarian'),
+                }.entries.map((entry) => CheckboxListTile(
+                      dense: true,
+                      contentPadding: EdgeInsets.zero,
+                      value: roles.contains(entry.key),
+                      title: Text(entry.value),
+                      onChanged: (checked) => setDialogState(() {
+                        if (checked == true) {
+                          roles.add(entry.key);
+                        } else {
+                          roles.remove(entry.key);
+                        }
+                      }),
+                    )),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(context, false), child: Text(AppText.get(language, 'cancel'))),
+            FilledButton(
+              onPressed: () async {
+                final added = name.text.trim().isNotEmpty &&
+                    password.text.trim().length >= 6 &&
+                    roles.isNotEmpty &&
+                    await AuthService.createUser(
+                      email: email.text,
+                      password: password.text,
+                      name: name.text,
+                      stableName: stable.text,
+                      roles: roles.toList(),
+                    );
+                if (!context.mounted) return;
+                Navigator.pop(context, added);
+              },
+              child: Text(AppText.get(language, 'add')),
+            ),
+          ],
+        ),
+      ),
+    );
+    name.dispose();
+    email.dispose();
+    password.dispose();
+    stable.dispose();
+    if (!mounted) return;
+    await _loadUsers();
+    if (!mounted) return;
+    if (result != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(AppText.get(language, result ? 'user_created' : 'user_create_error'))),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -184,6 +266,12 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
           appBar: AppBar(
             title: Text(AppText.get(language, 'validate_users')),
             actions: [
+              if (currentIsOwner)
+                IconButton(
+                  tooltip: AppText.get(language, 'create_user'),
+                  onPressed: _createUser,
+                  icon: const Icon(Icons.person_add_alt_1),
+                ),
               if (currentIsPrimary || currentIsOwner)
                 IconButton(
                   tooltip: AppText.get(language, 'add_administrator'),

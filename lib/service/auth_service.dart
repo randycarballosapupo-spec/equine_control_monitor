@@ -174,6 +174,42 @@ class AuthService {
   }) async {
     final isOwner = await isCurrentOwner();
     if (!isOwner && (!await isCurrentPrimaryAdmin() || await administratorCount() >= 5)) return false;
+    return _createApprovedUser(
+      email: email,
+      password: password,
+      name: name,
+      stableName: stableName,
+      roles: const ['admin'],
+    );
+  }
+
+  /// Crea directamente una cuenta ya aprobada con los roles indicados (solo asistente/admin principal).
+  static Future<bool> createUser({
+    required String email,
+    required String password,
+    required String name,
+    required String stableName,
+    required List<String> roles,
+  }) async {
+    final isOwner = await isCurrentOwner();
+    final isPrimary = await isCurrentPrimaryAdmin();
+    if (!isOwner && !isPrimary) return false;
+    return _createApprovedUser(
+      email: email,
+      password: password,
+      name: name,
+      stableName: stableName,
+      roles: roles,
+    );
+  }
+
+  static Future<bool> _createApprovedUser({
+    required String email,
+    required String password,
+    required String name,
+    required String stableName,
+    required List<String> roles,
+  }) async {
     final normalizedEmail = email.trim().toLowerCase();
     final previousSession = _client.auth.currentSession;
     try {
@@ -184,7 +220,7 @@ class AuthService {
         'id': user.id,
         'email': normalizedEmail,
         'name': name.trim(),
-        'roles': ['admin'],
+        'roles': roles,
         'stable_name': stableName.trim(),
         'status': 'approved',
       });
@@ -193,7 +229,7 @@ class AuthService {
       return false;
     } finally {
       // Creating a user via signUp() switches the active session to the new
-      // account. Restore the primary admin's session so they stay logged in.
+      // account. Restore the previous admin/owner's session so they stay logged in.
       final refreshToken = previousSession?.refreshToken;
       if (refreshToken != null) {
         try {
