@@ -66,7 +66,9 @@ class _AssistantInboxScreenState extends State<AssistantInboxScreen> {
         message.senderEmail == selectedEmail || message.recipientEmail == selectedEmail).toList();
     return Scaffold(
       appBar: AppBar(title: const Text('Mensajes al asistente')),
-      body: Row(
+      body: contacts.isEmpty
+          ? const Center(child: Text('Aún no hay mensajes de usuarios.'))
+          : Row(
         children: [
           SizedBox(
             width: 150,
@@ -83,7 +85,9 @@ class _AssistantInboxScreenState extends State<AssistantInboxScreen> {
             child: Column(
               children: [
                 Expanded(
-                  child: ListView.builder(
+                  child: selectedEmail == null
+                      ? const Center(child: Text('Selecciona un contacto de la izquierda.'))
+                      : ListView.builder(
                     padding: const EdgeInsets.all(12),
                     itemCount: selectedMessages.length,
                     itemBuilder: (context, index) => Align(
