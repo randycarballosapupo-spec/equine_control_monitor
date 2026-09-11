@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../service/auth_service.dart';
 import '../service/app_language.dart';
+import '../service/app_version.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key, required this.languageController});
@@ -178,6 +179,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ],
                   ),
+                ),
+              ),
+              Positioned(
+                bottom: 8,
+                right: 12,
+                child: Text(
+                  appVersion,
+                  style: const TextStyle(color: Color(0xFF9AA398), fontSize: 12),
                 ),
               ),
             ],
